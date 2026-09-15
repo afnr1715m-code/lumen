@@ -1,5 +1,14 @@
 import { Resend } from "resend";
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // Uses Resend's shared onboarding@resend.dev sender until Lumen verifies its
 // own domain in Resend — that sender only delivers to the email address the
 // Resend account itself was signed up with, which is exactly NOTIFY_EMAIL's
@@ -41,17 +50,17 @@ export async function notifyNewInquiry(data: {
   details: string;
 }) {
   await sendNotification(
-    `طلب مشروع جديد — ${data.name}`,
+    `طلب مشروع جديد — ${escapeHtml(data.name)}`,
     `
       <h2>طلب مشروع جديد</h2>
-      <p><strong>الاسم:</strong> ${data.name}</p>
-      ${data.company ? `<p><strong>الشركة:</strong> ${data.company}</p>` : ""}
-      <p><strong>البريد:</strong> ${data.email}</p>
-      <p><strong>الجوال:</strong> ${data.phone}</p>
-      <p><strong>نوع المشروع:</strong> ${data.projectType}</p>
-      ${data.budget ? `<p><strong>الميزانية:</strong> ${data.budget}</p>` : ""}
-      ${data.timeline ? `<p><strong>الموعد المتوقع:</strong> ${data.timeline}</p>` : ""}
-      <p><strong>التفاصيل:</strong><br/>${data.details.replace(/\n/g, "<br/>")}</p>
+      <p><strong>الاسم:</strong> ${escapeHtml(data.name)}</p>
+      ${data.company ? `<p><strong>الشركة:</strong> ${escapeHtml(data.company)}</p>` : ""}
+      <p><strong>البريد:</strong> ${escapeHtml(data.email)}</p>
+      <p><strong>الجوال:</strong> ${escapeHtml(data.phone)}</p>
+      <p><strong>نوع المشروع:</strong> ${escapeHtml(data.projectType)}</p>
+      ${data.budget ? `<p><strong>الميزانية:</strong> ${escapeHtml(data.budget)}</p>` : ""}
+      ${data.timeline ? `<p><strong>الموعد المتوقع:</strong> ${escapeHtml(data.timeline)}</p>` : ""}
+      <p><strong>التفاصيل:</strong><br/>${escapeHtml(data.details).replace(/\n/g, "<br/>")}</p>
     `
   );
 }
@@ -71,17 +80,17 @@ export async function notifyNewBooking(data: {
     timeStyle: "short",
   });
   await sendNotification(
-    `طلب حجز جديد بانتظار التحويل — ${data.consultationTitle}`,
+    `طلب حجز جديد بانتظار التحويل — ${escapeHtml(data.consultationTitle)}`,
     `
       <h2>طلب حجز استشارة جديد — بانتظار الدفع</h2>
       <p>يلزم الرد على العميل بالبريد الإلكتروني ببيانات التحويل البنكي، ثم تأكيد الحجز يدويًا في Supabase بعد استلام المبلغ.</p>
-      <p><strong>رقم المرجع:</strong> ${data.reference}</p>
-      <p><strong>نوع الاستشارة:</strong> ${data.consultationTitle}</p>
+      <p><strong>رقم المرجع:</strong> ${escapeHtml(data.reference)}</p>
+      <p><strong>نوع الاستشارة:</strong> ${escapeHtml(data.consultationTitle)}</p>
       <p><strong>الموعد المطلوب:</strong> ${when}</p>
-      <p><strong>الاسم:</strong> ${data.name}</p>
-      <p><strong>البريد:</strong> ${data.email}</p>
-      <p><strong>الجوال:</strong> ${data.phone}</p>
-      ${data.notes ? `<p><strong>ملاحظات:</strong><br/>${data.notes.replace(/\n/g, "<br/>")}</p>` : ""}
+      <p><strong>الاسم:</strong> ${escapeHtml(data.name)}</p>
+      <p><strong>البريد:</strong> ${escapeHtml(data.email)}</p>
+      <p><strong>الجوال:</strong> ${escapeHtml(data.phone)}</p>
+      ${data.notes ? `<p><strong>ملاحظات:</strong><br/>${escapeHtml(data.notes).replace(/\n/g, "<br/>")}</p>` : ""}
     `
   );
 }
@@ -94,15 +103,15 @@ export async function notifyMilestonePaymentClaimed(data: {
   proposalId: string;
 }) {
   await sendNotification(
-    `تحويل مُرسَل لمرحلة دفع — ${data.projectName}`,
+    `تحويل مُرسَل لمرحلة دفع — ${escapeHtml(data.projectName)}`,
     `
       <h2>عميل يقول إنه أرسل تحويلًا لمرحلة دفع</h2>
       <p>تحقق من استلام المبلغ، ثم أكّد المرحلة يدويًا في Supabase (project_milestones → status = paid).</p>
-      <p><strong>المشروع:</strong> ${data.projectName}</p>
-      <p><strong>العميل:</strong> ${data.clientName}</p>
-      <p><strong>المرحلة:</strong> ${data.milestoneName}</p>
-      <p><strong>المبلغ:</strong> ${data.amountLabel}</p>
-      <p><strong>رقم المقترح:</strong> ${data.proposalId}</p>
+      <p><strong>المشروع:</strong> ${escapeHtml(data.projectName)}</p>
+      <p><strong>العميل:</strong> ${escapeHtml(data.clientName)}</p>
+      <p><strong>المرحلة:</strong> ${escapeHtml(data.milestoneName)}</p>
+      <p><strong>المبلغ:</strong> ${escapeHtml(data.amountLabel)}</p>
+      <p><strong>رقم المقترح:</strong> ${escapeHtml(data.proposalId)}</p>
     `
   );
 }

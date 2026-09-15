@@ -66,6 +66,9 @@ export async function POST(request: Request) {
     .single();
 
   if (bookingError || !booking) {
+    if (bookingError?.code === "23505") {
+      return NextResponse.json({ error: "slot_taken" }, { status: 409 });
+    }
     console.error("booking insert failed:", bookingError);
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }

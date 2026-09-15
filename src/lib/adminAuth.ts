@@ -13,6 +13,15 @@ function getSecret(): string {
   return secret;
 }
 
+function timingSafeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < a.length; i++) {
+    mismatch |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
 async function hmacHex(secret: string, message: string): Promise<string> {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -35,5 +44,5 @@ export async function createAdminSessionToken(): Promise<string> {
 export async function isValidAdminSessionToken(token: string | undefined | null): Promise<boolean> {
   if (!token) return false;
   const expected = await createAdminSessionToken();
-  return token === expected;
+  return timingSafeEqual(token, expected);
 }

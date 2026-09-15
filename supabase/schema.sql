@@ -57,6 +57,12 @@ create table if not exists bookings (
 
 create index if not exists bookings_slot_id_idx on bookings(slot_id);
 
+-- Prevents two concurrent requests from both booking the same slot (the API
+-- route's own "is this slot already booked" check can't fully close that
+-- race on its own — this unique index is the actual guarantee).
+create unique index if not exists bookings_active_slot_unique
+    on bookings(slot_id) where status <> 'cancelled';
+
 -- Payment record for a booking (also reusable later for project milestone
 -- payments via a nullable project_inquiry_id, kept out of scope for now).
 create table if not exists payments (
