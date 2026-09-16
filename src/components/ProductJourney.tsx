@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 export default function ProductJourney({ dict }: { dict: Dictionary }) {
   return (
     <section className="border-b border-line bg-dark text-white">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="max-w-2xl">
           <span className="text-sm font-semibold text-accent">{dict.productJourney.eyebrow}</span>
           <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">{dict.productJourney.title}</h2>

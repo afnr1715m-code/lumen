@@ -4,6 +4,7 @@ import type { Dictionary } from "@/lib/i18n/types";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MobileNav from "./MobileNav";
 import LumenMark from "./LumenMark";
+import { buttonClass } from "./buttonStyles";
 
 export default function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
@@ -19,7 +20,7 @@ export default function SiteHeader({ locale, dict }: { locale: Locale; dict: Dic
             <Link
               key={link.label}
               href={`/${locale}${link.href}`}
-              className="text-sm font-medium text-muted transition hover:text-ink"
+              className="relative text-sm font-medium text-muted transition hover:text-ink after:absolute after:-bottom-1 after:start-0 after:h-px after:w-full after:origin-center after:scale-x-0 after:bg-accent after:transition-transform after:duration-300 after:content-[''] hover:after:scale-x-100"
             >
               {link.label}
             </Link>
@@ -28,16 +29,10 @@ export default function SiteHeader({ locale, dict }: { locale: Locale; dict: Dic
 
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher locale={locale} label={dict.nav.languageToggle} />
-          <Link
-            href={`/${locale}/consultations`}
-            className="rounded-full border border-line px-4 py-2 text-sm font-medium text-ink transition hover:border-accent hover:text-accent"
-          >
+          <Link href={`/${locale}/consultations`} className={buttonClass({ variant: "secondary", size: "sm" })}>
             {dict.nav.bookConsultation}
           </Link>
-          <Link
-            href={`/${locale}/start-project`}
-            className="rounded-full bg-ink px-5 py-2 text-sm font-semibold text-white transition hover:bg-accent"
-          >
+          <Link href={`/${locale}/start-project`} className={buttonClass({ variant: "primary", size: "sm" })}>
             {dict.nav.startProject}
           </Link>
         </div>

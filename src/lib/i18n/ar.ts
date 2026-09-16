@@ -10,11 +10,10 @@ const ar: Dictionary = {
     brand: "لومن",
     links: [
       { label: "الخدمات", href: "/#services" },
-      { label: "الحلول", href: "/#why-lumen" },
+      { label: "الحلول", href: "/#industries" },
       { label: "مشاريعنا", href: "/#portfolio" },
       { label: "لماذا لومن", href: "/#why-lumen" },
       { label: "طريقة العمل", href: "/#process" },
-      { label: "الأسعار", href: "/pricing" },
       { label: "تواصل معنا", href: "/start-project" },
     ],
     startProject: "ابدأ مشروعك",
@@ -50,7 +49,6 @@ const ar: Dictionary = {
         "لوحات التحكم",
       ],
       priceFrom: "١,٥٠٠ ريال",
-      pricingAnchor: "web",
     },
     {
       number: "02",
@@ -68,7 +66,6 @@ const ar: Dictionary = {
         "تطبيقات الحجز",
       ],
       priceFrom: "٨,٠٠٠ ريال",
-      pricingAnchor: "mobile",
     },
     {
       number: "03",
@@ -85,7 +82,6 @@ const ar: Dictionary = {
         "تحسين تجربة المستخدم",
       ],
       priceFrom: "٣٠٠ ريال",
-      pricingAnchor: "uiux",
     },
     {
       number: "04",
@@ -104,7 +100,6 @@ const ar: Dictionary = {
         "Business Process Automation",
       ],
       priceFrom: "١,٥٠٠ ريال",
-      pricingAnchor: "automation",
     },
     {
       number: "05",
@@ -121,7 +116,6 @@ const ar: Dictionary = {
         "Custom AI Solutions",
       ],
       priceFrom: "٢,٠٠٠ ريال",
-      pricingAnchor: "ai",
     },
     {
       number: "06",
@@ -141,7 +135,6 @@ const ar: Dictionary = {
         "Custom Business Systems",
       ],
       priceFrom: "١,٥٠٠ ريال",
-      pricingAnchor: "dashboards",
     },
     {
       number: "07",
@@ -159,7 +152,6 @@ const ar: Dictionary = {
         "الإطلاق",
         "التطوير المستمر",
       ],
-      pricingAnchor: "",
     },
     {
       number: "08",
@@ -175,7 +167,6 @@ const ar: Dictionary = {
         "التحول الرقمي",
       ],
       priceFrom: "١٥٠ ريال / ساعة",
-      pricingAnchor: "consulting",
     },
     {
       number: "09",
@@ -193,7 +184,6 @@ const ar: Dictionary = {
         "الدعم التقني",
       ],
       priceFrom: "٣٠٠ ريال / شهر",
-      pricingAnchor: "post-launch",
     },
   ],
   productJourney: {
@@ -565,133 +555,6 @@ const ar: Dictionary = {
       disclaimer:
         "هذه الصفحة نسخة أولية عامة، ونوصي بمراجعتها من قبل مستشار قانوني قبل الاعتماد عليها بشكل نهائي.",
     },
-  },
-  pricing: {
-    metaDescription:
-      "أسعار خدمات لومن لتطوير المواقع والتطبيقات، تصميم UI/UX، لوحات التحكم، الأتمتة، الذكاء الاصطناعي، وSEO — أسعار واضحة تبدأ من حدها الأدنى.",
-    headline: "الأسعار",
-    subtitle:
-      "أسعار واضحة لكل خدمة نقدّمها، من أول صفحة إلى منصة متكاملة. كل رقم أدناه هو نقطة انطلاق، والتكلفة النهائية تُحدَّد بعد فهم مشروعك.",
-    categories: [
-      {
-        slug: "web",
-        title: "تطوير المواقع الإلكترونية",
-        description: "نصمم ونطور مواقع إلكترونية احترافية تجمع بين التصميم المميز والأداء وتجربة المستخدم.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "Landing Page", price: "١,٥٠٠ ريال" },
-          { name: "موقع شركة", price: "٣,٠٠٠ ريال" },
-          { name: "موقع احترافي مخصص", price: "٥,٠٠٠ ريال" },
-          { name: "متجر إلكتروني", price: "٥,٠٠٠ ريال" },
-          { name: "موقع أو منصة متقدمة", price: "٨,٠٠٠ ريال" },
-        ],
-      },
-      {
-        slug: "mobile",
-        title: "تطوير تطبيقات الجوال",
-        description: "نحوّل أفكارك إلى تطبيقات جوال حديثة وقابلة للتوسع.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "تطبيق بسيط", price: "٨,٠٠٠ ريال" },
-          { name: "تطبيق متوسط", price: "١٥,٠٠٠ ريال" },
-          { name: "تطبيق متكامل", price: "٢٥,٠٠٠ ريال" },
-          { name: "منصة متعددة الأطراف", price: "٤٠,٠٠٠ ريال" },
-        ],
-      },
-      {
-        slug: "uiux",
-        title: "تصميم UI/UX",
-        description: "نصمم تجارب رقمية تجمع بين الجمال وسهولة الاستخدام وتحقيق أهداف المشروع.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "تصميم صفحة واحدة", price: "٣٠٠ ريال" },
-          { name: "تصميم واجهة موقع كامل", price: "١,٥٠٠ ريال" },
-          { name: "تصميم UI/UX لتطبيق", price: "٢,٥٠٠ ريال" },
-          { name: "تصميم نظام أو منصة كاملة", price: "٤,٠٠٠ ريال" },
-        ],
-      },
-      {
-        slug: "dashboards",
-        title: "لوحات التحكم والأنظمة الإدارية",
-        description: "لوحات تحكم مخصصة تساعدك على إدارة مشروعك وبياناتك ومتابعة عملياتك بسهولة.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "Dashboard بسيطة", price: "١,٥٠٠ ريال" },
-          { name: "Dashboard متوسطة", price: "٣,٠٠٠ ريال" },
-          { name: "Dashboard متقدمة", price: "٥,٠٠٠ ريال" },
-        ],
-      },
-      {
-        slug: "seo",
-        title: "تحسين محركات البحث SEO",
-        description: "نساعد موقعك على الظهور بشكل أفضل في نتائج محركات البحث والوصول إلى العملاء المستهدفين.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "تهيئة SEO أساسية", price: "٧٥٠ ريال" },
-          { name: "SEO متقدم", price: "١,٥٠٠ ريال" },
-          { name: "SEO شهري", price: "٧٥٠ ريال / شهر" },
-        ],
-      },
-      {
-        slug: "automation",
-        title: "الأتمتة وربط الأنظمة",
-        description: "نحوّل العمليات المتكررة إلى سير عمل آلي يساعدك على توفير الوقت وتقليل العمل اليدوي.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "أتمتة بسيطة", price: "١,٥٠٠ ريال" },
-          { name: "أتمتة متوسطة", price: "٣,٠٠٠ ريال" },
-          { name: "أتمتة متقدمة", price: "٥,٠٠٠ ريال" },
-        ],
-      },
-      {
-        slug: "ai",
-        title: "حلول الذكاء الاصطناعي",
-        description: "نوظف تقنيات الذكاء الاصطناعي لبناء حلول عملية تناسب احتياجات أعمالك.",
-        ctaLabel: "اطلب عرض سعر",
-        tiers: [
-          { name: "دمج الذكاء الاصطناعي", price: "٢,٠٠٠ ريال" },
-          { name: "Chatbot ذكي", price: "٣,٠٠٠ ريال" },
-          { name: "AI Agent", price: "٥,٠٠٠ ريال" },
-          { name: "نظام AI مخصص", price: "حسب المتطلبات" },
-        ],
-      },
-    ],
-    consulting: {
-      slug: "consulting",
-      title: "الاستشارات التقنية",
-      description:
-        "جلسة استشارية لمناقشة فكرتك أو مشروعك، اختيار التقنية المناسبة، مراجعة الحلول، وتحديد أفضل طريقة للتنفيذ.",
-      hourlyName: "استشارة تقنية",
-      hourlyPrice: "١٥٠ ريال / ساعة",
-      hourlyCta: "احجز استشارتك",
-      analysisName: "تحليل فكرة مشروع",
-      analysisPrice: "تبدأ من ٣٠٠ ريال",
-      analysisCta: "اطلب عرض سعر",
-    },
-    postLaunch: {
-      slug: "post-launch",
-      title: "نستمر معك بعد الإطلاق",
-      description:
-        "إطلاق مشروعك ليس النهاية. يمكنك العودة إلى لومن في أي وقت للصيانة، إضافة الميزات، أو تطوير مشروعك مع نمو احتياجاتك.",
-      items: [
-        { name: "الصيانة والدعم", price: "تبدأ من ٣٠٠ ريال / شهر" },
-        { name: "إضافة صفحة", price: "تبدأ من ٣٠٠ ريال" },
-        { name: "تعديلات وتحسينات", price: "تبدأ من ٣٠٠ ريال" },
-        { name: "إضافة ميزة جديدة", price: "تبدأ من ٥٠٠ ريال" },
-        { name: "تطوير وظيفة موجودة", price: "تبدأ من ٥٠٠ ريال" },
-        { name: "تكامل API", price: "تبدأ من ٥٠٠ ريال" },
-        { name: "إضافة بوابة دفع", price: "تبدأ من ٧٥٠ ريال" },
-      ],
-      cta: "اطلب عرض سعر",
-    },
-    note: "جميع الأسعار المذكورة هي أسعار تبدأ من، وقد تختلف التكلفة النهائية حسب متطلبات المشروع ونطاق العمل.",
-    finalCta: {
-      headline: "لديك مشروع في بالك؟",
-      subtitle: "أخبرنا بفكرتك وسنساعدك في تحويلها إلى حل تقني قابل للتنفيذ.",
-      primary: "اطلب عرض سعر",
-      secondary: "تواصل معنا",
-    },
-    viewPricing: "عرض الأسعار",
   },
 };
 

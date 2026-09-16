@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { buttonClass } from "./buttonStyles";
 
 export default function MobileNav({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open]);
 
   return (
     <div className="lg:hidden">
@@ -24,39 +34,46 @@ export default function MobileNav({ locale, dict }: { locale: Locale; dict: Dict
       </button>
 
       {open && (
-        <div className="absolute inset-x-0 top-full border-b border-line bg-bg px-6 py-6 shadow-lg">
-          <nav className="flex flex-col gap-4">
-            {dict.nav.links.map((link) => (
+        <>
+          <div
+            className="menu-backdrop-in fixed inset-0 z-40 bg-ink/40"
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+          />
+          <div className="menu-panel-in absolute inset-x-0 top-full z-50 border-b border-line bg-bg px-6 py-6 shadow-lg">
+            <nav className="flex flex-col gap-4">
+              {dict.nav.links.map((link) => (
+                <Link
+                  key={link.label}
+                  href={`/${locale}${link.href}`}
+                  onClick={() => setOpen(false)}
+                  className="text-base font-medium text-ink"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <div className="mt-6 flex flex-col gap-3">
               <Link
-                key={link.label}
-                href={`/${locale}${link.href}`}
+                href={`/${locale}/consultations`}
                 onClick={() => setOpen(false)}
-                className="text-base font-medium text-ink"
+                className={buttonClass({ variant: "secondary", size: "touch" })}
               >
-                {link.label}
+                {dict.nav.bookConsultation}
               </Link>
-            ))}
-          </nav>
-          <div className="mt-6 flex flex-col gap-3">
-            <Link
-              href={`/${locale}/consultations`}
-              onClick={() => setOpen(false)}
-              className="rounded-full border border-line px-4 py-2.5 text-center text-sm font-medium text-ink"
-            >
-              {dict.nav.bookConsultation}
-            </Link>
-            <Link
-              href={`/${locale}/start-project`}
-              onClick={() => setOpen(false)}
-              className="rounded-full bg-ink px-4 py-2.5 text-center text-sm font-semibold text-white"
-            >
-              {dict.nav.startProject}
-            </Link>
-            <div className="pt-2">
-              <LanguageSwitcher locale={locale} label={dict.nav.languageToggle} />
+              <Link
+                href={`/${locale}/start-project`}
+                onClick={() => setOpen(false)}
+                className={buttonClass({ variant: "primary", size: "touch" })}
+              >
+                {dict.nav.startProject}
+              </Link>
+              <div className="pt-2">
+                <LanguageSwitcher locale={locale} label={dict.nav.languageToggle} />
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

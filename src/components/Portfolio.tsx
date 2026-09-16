@@ -46,7 +46,7 @@ function ProjectIcon({ icon }: { icon: PortfolioIcon }) {
 export default function Portfolio({ dict }: { dict: Dictionary }) {
   return (
     <section id="portfolio" className="border-b border-line">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.portfolio.headline}</h2>
           <p className="mt-4 text-lg text-muted">{dict.portfolio.subtitle}</p>
@@ -55,7 +55,7 @@ export default function Portfolio({ dict }: { dict: Dictionary }) {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.portfolio.projects.map((project, i) => (
             <Reveal key={i} delay={i * 80}>
-              <div className="overflow-hidden rounded-2xl border border-line">
+              <div className="overflow-hidden rounded-2xl border border-line transition duration-300 ease-out hover:-translate-y-1 hover:border-accent hover:shadow-[0_20px_50px_-25px_rgba(59,82,255,0.35)]">
                 <div
                   className={`flex aspect-[4/3] flex-col items-center justify-center gap-3 ${
                     project.icon === "placeholder" ? "bg-surface text-muted" : "bg-accent/5 text-accent"

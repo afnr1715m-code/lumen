@@ -59,3 +59,145 @@ html[dir="ltr"] body {
 .reveal.is-visible {
   animation: reveal-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+  }
+
+  .reveal.is-visible {
+    animation: none;
+  }
+}
+
+/* Hero ambient light — Lumen's brand is literally "light"; this is the one
+   authored focal moment, everything else on the site stays quieter. */
+.hero-glow {
+  --mx: 0;
+  --my: 0;
+}
+
+.hero-glow-blob {
+  transform: translate3d(0, 0, 0);
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  will-change: transform;
+}
+
+.hero-glow-blob--a {
+  animation-name: glow-drift-a;
+  animation-duration: 18s;
+}
+
+.hero-glow-blob--b {
+  animation-name: glow-drift-b;
+  animation-duration: 22s;
+}
+
+.hero-glow-blob--c {
+  animation-name: glow-drift-c;
+  animation-duration: 26s;
+}
+
+@keyframes glow-drift-a {
+  from {
+    transform: translate3d(calc(var(--mx) * 20px), calc(var(--my) * 20px), 0) scale(1);
+  }
+  to {
+    transform: translate3d(calc(var(--mx) * 20px + 24px), calc(var(--my) * 20px - 18px), 0) scale(1.06);
+  }
+}
+
+@keyframes glow-drift-b {
+  from {
+    transform: translate3d(calc(var(--mx) * -16px), calc(var(--my) * 16px), 0) scale(1);
+  }
+  to {
+    transform: translate3d(calc(var(--mx) * -16px - 20px), calc(var(--my) * 16px + 14px), 0) scale(1.1);
+  }
+}
+
+@keyframes glow-drift-c {
+  from {
+    transform: translate3d(calc(var(--mx) * 14px), calc(var(--my) * -14px), 0) scale(1);
+  }
+  to {
+    transform: translate3d(calc(var(--mx) * 14px + 16px), calc(var(--my) * -14px + 20px), 0) scale(1.05);
+  }
+}
+
+/* A single quieter echo of the hero's light motif behind the closing CTA. */
+.cta-glow {
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+/* The hero graphic's hub node reads as a live signal, not a static dot. */
+.hero-node-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.75;
+  }
+}
+
+@keyframes menu-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes menu-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menu-backdrop-in {
+  animation: menu-backdrop-in 200ms ease-out;
+}
+
+.menu-panel-in {
+  animation: menu-panel-in 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-glow-blob,
+  .cta-glow,
+  .hero-node-pulse {
+    animation: none;
+  }
+
+  .menu-backdrop-in,
+  .menu-panel-in {
+    animation: none;
+  }
+}

@@ -4,7 +4,7 @@ import Reveal from "./Reveal";
 export default function WhyLumen({ dict }: { dict: Dictionary }) {
   return (
     <section id="why-lumen" className="border-b border-line">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.whyLumen.headline}</h2>
           <p className="mt-4 text-lg text-muted">{dict.whyLumen.subtitle}</p>

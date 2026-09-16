@@ -3,8 +3,8 @@ import Reveal from "./Reveal";
 
 export default function Industries({ dict }: { dict: Dictionary }) {
   return (
-    <section className="border-b border-line bg-surface">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-10">
+    <section id="industries" className="border-b border-line bg-surface">
+      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="max-w-2xl">
           <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.industries.headline}</h2>
           <p className="mt-4 text-lg text-muted">{dict.industries.subtitle}</p>

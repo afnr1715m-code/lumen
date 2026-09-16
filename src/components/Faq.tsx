@@ -9,7 +9,7 @@ export default function Faq({ dict }: { dict: Dictionary }) {
 
   return (
     <section className="border-b border-line">
-      <div className="mx-auto max-w-3xl px-6 py-24 lg:px-10">
+      <div className="mx-auto max-w-3xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="text-center">
           <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.faq.headline}</h2>
         </Reveal>

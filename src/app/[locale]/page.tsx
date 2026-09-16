@@ -35,13 +35,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <Hero locale={typedLocale} dict={dict} />
-      <ServicesGrid locale={typedLocale} dict={dict} />
+      <ServicesGrid dict={dict} />
       <ProductJourney dict={dict} />
       <WhyLumen dict={dict} />
       <Process dict={dict} />
       <Portfolio dict={dict} />
       <Industries dict={dict} />
       <TechStack dict={dict} />
+      <Faq dict={dict} />
       <CtaSection
         headline={dict.cta.headline}
         subtitle={dict.cta.subtitle}
@@ -50,7 +51,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         secondaryLabel={dict.cta.secondary}
         secondaryHref={`/${typedLocale}/consultations`}
       />
-      <Faq dict={dict} />
     </>
   );
 }

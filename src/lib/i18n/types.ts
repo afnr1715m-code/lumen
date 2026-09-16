@@ -10,7 +10,6 @@ export interface Service {
   description: string;
   items: string[];
   priceFrom?: string;
-  pricingAnchor?: string;
 }
 
 export interface Feature {
@@ -57,58 +56,6 @@ export interface LegalPage {
   intro: string;
   sections: LegalSection[];
   disclaimer: string;
-}
-
-export interface PricingTier {
-  name: string;
-  price: string;
-  ctaLabel?: string;
-}
-
-export interface PricingCategory {
-  slug: string;
-  title: string;
-  description: string;
-  tiers: PricingTier[];
-  ctaLabel: string;
-}
-
-export interface PricingPostLaunchItem {
-  name: string;
-  price: string;
-}
-
-export interface Pricing {
-  metaDescription: string;
-  headline: string;
-  subtitle: string;
-  categories: PricingCategory[];
-  consulting: {
-    slug: string;
-    title: string;
-    description: string;
-    hourlyName: string;
-    hourlyPrice: string;
-    hourlyCta: string;
-    analysisName: string;
-    analysisPrice: string;
-    analysisCta: string;
-  };
-  postLaunch: {
-    slug: string;
-    title: string;
-    description: string;
-    items: PricingPostLaunchItem[];
-    cta: string;
-  };
-  note: string;
-  finalCta: {
-    headline: string;
-    subtitle: string;
-    primary: string;
-    secondary: string;
-  };
-  viewPricing: string;
 }
 
 export interface Dictionary {
@@ -265,5 +212,4 @@ export interface Dictionary {
     privacy: LegalPage;
     terms: LegalPage;
   };
-  pricing: Pricing;
 }

@@ -3,7 +3,7 @@ import { locales } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n";
 import { SITE_URL } from "@/lib/site";
 
-const STATIC_PATHS = ["", "/pricing", "/start-project", "/consultations", "/privacy", "/terms"];
+const STATIC_PATHS = ["", "/start-project", "/consultations", "/privacy", "/terms"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];

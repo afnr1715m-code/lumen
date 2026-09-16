@@ -10,11 +10,10 @@ const en: Dictionary = {
     brand: "Lumen",
     links: [
       { label: "Services", href: "/#services" },
-      { label: "Solutions", href: "/#why-lumen" },
+      { label: "Solutions", href: "/#industries" },
       { label: "Work", href: "/#portfolio" },
       { label: "Why Lumen", href: "/#why-lumen" },
       { label: "How We Work", href: "/#process" },
-      { label: "Pricing", href: "/pricing" },
       { label: "Contact", href: "/start-project" },
     ],
     startProject: "Start a Project",
@@ -50,7 +49,6 @@ const en: Dictionary = {
         "Dashboards",
       ],
       priceFrom: "SAR 1,500",
-      pricingAnchor: "web",
     },
     {
       number: "02",
@@ -68,7 +66,6 @@ const en: Dictionary = {
         "Booking Apps",
       ],
       priceFrom: "SAR 8,000",
-      pricingAnchor: "mobile",
     },
     {
       number: "03",
@@ -77,7 +74,6 @@ const en: Dictionary = {
       description: "Clear user experiences and interfaces that reflect the quality of your product.",
       items: ["User Research", "User Flows", "Wireframes", "UI Design", "Prototypes", "Design Systems", "UX Optimization"],
       priceFrom: "SAR 300",
-      pricingAnchor: "uiux",
     },
     {
       number: "04",
@@ -96,7 +92,6 @@ const en: Dictionary = {
         "Business Process Automation",
       ],
       priceFrom: "SAR 1,500",
-      pricingAnchor: "automation",
     },
     {
       number: "05",
@@ -113,7 +108,6 @@ const en: Dictionary = {
         "Custom AI Solutions",
       ],
       priceFrom: "SAR 2,000",
-      pricingAnchor: "ai",
     },
     {
       number: "06",
@@ -133,7 +127,6 @@ const en: Dictionary = {
         "Custom Business Systems",
       ],
       priceFrom: "SAR 1,500",
-      pricingAnchor: "dashboards",
     },
     {
       number: "07",
@@ -141,7 +134,6 @@ const en: Dictionary = {
       title: "Digital Product Development",
       description: "A complete partnership to build your digital product from scratch — from idea to product.",
       items: ["Idea", "Requirements", "Strategy", "UX", "UI", "Development", "Testing", "Launch", "Ongoing Development"],
-      pricingAnchor: "",
     },
     {
       number: "08",
@@ -157,7 +149,6 @@ const en: Dictionary = {
         "Digital Transformation",
       ],
       priceFrom: "SAR 150/hr",
-      pricingAnchor: "consulting",
     },
     {
       number: "09",
@@ -175,7 +166,6 @@ const en: Dictionary = {
         "Technical Support",
       ],
       priceFrom: "SAR 300/mo",
-      pricingAnchor: "post-launch",
     },
   ],
   productJourney: {
@@ -448,133 +438,6 @@ const en: Dictionary = {
       ],
       disclaimer: "This page is a general first draft — we recommend having it reviewed by legal counsel before relying on it as final.",
     },
-  },
-  pricing: {
-    metaDescription:
-      "Lumen's pricing for website and app development, UI/UX design, dashboards, automation, AI, and SEO — clear starting rates for every service.",
-    headline: "Pricing",
-    subtitle:
-      "Clear pricing for every service we offer, from a single page to a full platform. Every figure below is a starting point — final cost depends on your project's scope.",
-    categories: [
-      {
-        slug: "web",
-        title: "Website Development",
-        description: "We design and build professional websites that combine strong design, performance, and user experience.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Landing Page", price: "From SAR 1,500" },
-          { name: "Company Website", price: "From SAR 3,000" },
-          { name: "Custom Professional Website", price: "From SAR 5,000" },
-          { name: "E-commerce Store", price: "From SAR 5,000" },
-          { name: "Advanced Website or Platform", price: "From SAR 8,000" },
-        ],
-      },
-      {
-        slug: "mobile",
-        title: "Mobile App Development",
-        description: "We turn your ideas into modern, scalable mobile apps.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Simple App", price: "From SAR 8,000" },
-          { name: "Mid-size App", price: "From SAR 15,000" },
-          { name: "Full-featured App", price: "From SAR 25,000" },
-          { name: "Multi-sided Platform", price: "From SAR 40,000" },
-        ],
-      },
-      {
-        slug: "uiux",
-        title: "UI/UX Design",
-        description: "We design digital experiences that balance beauty, usability, and your project's goals.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Single Page Design", price: "From SAR 300" },
-          { name: "Full Website Interface", price: "From SAR 1,500" },
-          { name: "App UI/UX Design", price: "From SAR 2,500" },
-          { name: "Full System or Platform Design", price: "From SAR 4,000" },
-        ],
-      },
-      {
-        slug: "dashboards",
-        title: "Dashboards & Admin Systems",
-        description: "Custom dashboards that help you manage your project, data, and operations with ease.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Simple Dashboard", price: "From SAR 1,500" },
-          { name: "Mid-size Dashboard", price: "From SAR 3,000" },
-          { name: "Advanced Dashboard", price: "From SAR 5,000" },
-        ],
-      },
-      {
-        slug: "seo",
-        title: "Search Engine Optimization (SEO)",
-        description: "We help your website rank better in search results and reach the customers you're targeting.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Basic SEO Setup", price: "From SAR 750" },
-          { name: "Advanced SEO", price: "From SAR 1,500" },
-          { name: "Monthly SEO", price: "From SAR 750/mo" },
-        ],
-      },
-      {
-        slug: "automation",
-        title: "Automation & Systems Integration",
-        description: "We turn repetitive processes into automated workflows that save time and reduce manual work.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "Simple Automation", price: "From SAR 1,500" },
-          { name: "Mid-level Automation", price: "From SAR 3,000" },
-          { name: "Advanced Automation", price: "From SAR 5,000" },
-        ],
-      },
-      {
-        slug: "ai",
-        title: "AI Solutions",
-        description: "We apply AI technology to build practical solutions tailored to your business needs.",
-        ctaLabel: "Request a Quote",
-        tiers: [
-          { name: "AI Integration", price: "From SAR 2,000" },
-          { name: "Smart Chatbot", price: "From SAR 3,000" },
-          { name: "AI Agent", price: "From SAR 5,000" },
-          { name: "Custom AI System", price: "Based on requirements" },
-        ],
-      },
-    ],
-    consulting: {
-      slug: "consulting",
-      title: "Technology Consulting",
-      description:
-        "A consulting session to discuss your idea or project, choose the right technology, review your options, and define the best way to execute.",
-      hourlyName: "Technology Consultation",
-      hourlyPrice: "SAR 150/hr",
-      hourlyCta: "Book Your Consultation",
-      analysisName: "Project Idea Analysis",
-      analysisPrice: "From SAR 300",
-      analysisCta: "Request a Quote",
-    },
-    postLaunch: {
-      slug: "post-launch",
-      title: "We stay with you after launch",
-      description:
-        "Launching your project isn't the end. You can come back to Lumen anytime for maintenance, new features, or continued development as your needs grow.",
-      items: [
-        { name: "Maintenance & Support", price: "From SAR 300/mo" },
-        { name: "New Page", price: "From SAR 300" },
-        { name: "Edits & Improvements", price: "From SAR 300" },
-        { name: "New Feature", price: "From SAR 500" },
-        { name: "Enhancing an Existing Feature", price: "From SAR 500" },
-        { name: "API Integration", price: "From SAR 500" },
-        { name: "Payment Gateway Integration", price: "From SAR 750" },
-      ],
-      cta: "Request a Quote",
-    },
-    note: "All prices listed are starting prices — the final cost may vary depending on your project's requirements and scope.",
-    finalCta: {
-      headline: "Have a project in mind?",
-      subtitle: "Tell us about your idea and we'll help you turn it into a workable technology solution.",
-      primary: "Request a Quote",
-      secondary: "Get in Touch",
-    },
-    viewPricing: "View Pricing",
   },
 };
 
