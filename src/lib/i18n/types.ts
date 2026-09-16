@@ -63,7 +63,6 @@ export interface PricingTier {
   name: string;
   price: string;
   ctaLabel?: string;
-  ctaTarget?: "quote" | "consultation";
 }
 
 export interface PricingCategory {
@@ -72,7 +71,6 @@ export interface PricingCategory {
   description: string;
   tiers: PricingTier[];
   ctaLabel: string;
-  ctaTarget?: "quote" | "consultation";
 }
 
 export interface PricingPostLaunchItem {
@@ -192,7 +190,6 @@ export interface Dictionary {
     stepDetails: string;
     stepSchedule: string;
     stepReview: string;
-    included: string;
     dateLabel: string;
     timeLabel: string;
     noSlotsForDay: string;

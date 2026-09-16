@@ -279,7 +279,6 @@ const en: Dictionary = {
     stepDetails: "Details",
     stepSchedule: "Schedule",
     stepReview: "Review",
-    included: "What's included",
     dateLabel: "Choose a date",
     timeLabel: "Choose a time",
     noSlotsForDay: "No available slots on this day — try another day.",

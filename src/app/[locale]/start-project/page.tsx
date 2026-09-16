@@ -32,11 +32,11 @@ export default async function StartProjectPage({
   const dict = getDictionary(typedLocale);
 
   const { package: packageName } = await searchParams;
-  const initialDetails = packageName
-    ? typedLocale === "ar"
-      ? `مهتم بباقة: ${packageName}`
-      : `Interested in the "${packageName}" package.`
-    : undefined;
+  let initialDetails: string | undefined;
+  if (packageName) {
+    initialDetails =
+      typedLocale === "ar" ? `مهتم بباقة: ${packageName}` : `Interested in the "${packageName}" package.`;
+  }
 
   return (
     <section className="mx-auto max-w-2xl px-6 py-20 lg:px-10 lg:py-28">

@@ -3,8 +3,10 @@
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/types";
+import { formatCurrency } from "@/lib/format";
+import { postJson } from "@/lib/http";
 
-export interface MilestoneData {
+interface MilestoneData {
   id: string;
   name: string;
   amount_cents: number;
@@ -18,13 +20,6 @@ interface Props {
   clientName: string;
   currency: string;
   milestones: MilestoneData[];
-}
-
-function formatMoney(cents: number, currency: string, locale: Locale) {
-  return new Intl.NumberFormat(locale === "ar" ? "ar-SA" : "en-US", {
-    style: "currency",
-    currency,
-  }).format(cents / 100);
 }
 
 export default function ProposalView({ locale, dict, projectName, clientName, currency, milestones: initial }: Props) {
@@ -41,22 +36,14 @@ export default function ProposalView({ locale, dict, projectName, clientName, cu
     return p.statusPending;
   };
 
-  const statusClass = (status: MilestoneData["status"]) => {
-    if (status === "paid") return "bg-accent/10 text-accent";
-    if (status === "awaiting_confirmation") return "bg-surface text-muted";
-    return "bg-surface text-muted";
-  };
+  const statusClass = (status: MilestoneData["status"]) =>
+    status === "paid" ? "bg-accent/10 text-accent" : "bg-surface text-muted";
 
   const handleConfirm = async (milestoneId: string) => {
     setSubmittingId(milestoneId);
     setError("");
     try {
-      const res = await fetch("/api/proposals/confirm-milestone", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ milestoneId }),
-      });
-      if (!res.ok) throw new Error("failed");
+      await postJson("/api/proposals/confirm-milestone", { milestoneId });
       setMilestones((prev) =>
         prev.map((m) => (m.id === milestoneId ? { ...m, status: "awaiting_confirmation" } : m))
       );
@@ -75,7 +62,7 @@ export default function ProposalView({ locale, dict, projectName, clientName, cu
       <div className="mt-10 rounded-2xl border border-line p-6">
         <div className="flex items-center justify-between border-b border-line pb-4">
           <span className="text-sm font-semibold text-muted">{p.totalLabel}</span>
-          <span className="text-lg font-bold text-ink">{formatMoney(total, currency, locale)}</span>
+          <span className="text-lg font-bold text-ink">{formatCurrency(total, currency, locale)}</span>
         </div>
 
         <h2 className="mt-6 text-sm font-semibold text-muted">{p.milestonesTitle}</h2>
@@ -85,7 +72,7 @@ export default function ProposalView({ locale, dict, projectName, clientName, cu
               <div className="flex items-center justify-between gap-3">
                 <div>
                   <div className="font-semibold text-ink">{milestone.name}</div>
-                  <div className="mt-1 text-sm text-muted">{formatMoney(milestone.amount_cents, currency, locale)}</div>
+                  <div className="mt-1 text-sm text-muted">{formatCurrency(milestone.amount_cents, currency, locale)}</div>
                 </div>
                 <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${statusClass(milestone.status)}`}>
                   {statusLabel(milestone.status)}

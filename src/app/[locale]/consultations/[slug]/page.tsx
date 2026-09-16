@@ -4,6 +4,7 @@ import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { formatCurrency } from "@/lib/format";
 import BookingFlow from "@/components/BookingFlow";
 
 export async function generateMetadata({
@@ -49,10 +50,7 @@ export default async function ConsultationBookingPage({
 
   const priceLabel =
     consultationType.price_cents != null
-      ? new Intl.NumberFormat(typedLocale === "ar" ? "ar-SA" : "en-US", {
-          style: "currency",
-          currency: consultationType.currency,
-        }).format(consultationType.price_cents / 100)
+      ? formatCurrency(consultationType.price_cents, consultationType.currency, typedLocale)
       : dict.consultationsIndex.priceValue;
 
   return (
@@ -91,7 +89,6 @@ export default async function ConsultationBookingPage({
           dict={dict}
           category={category}
           consultationTypeId={consultationType.id}
-          durationMinutes={consultationType.duration_minutes}
           priceLabel={priceLabel}
         />
       </div>

@@ -2,6 +2,8 @@
 
 import { useState, type FormEvent } from "react";
 import type { Dictionary } from "@/lib/i18n/types";
+import { postJson } from "@/lib/http";
+import { FORM_INPUT_CLASS, FORM_LABEL_CLASS } from "@/components/formStyles";
 
 export default function StartProjectForm({
   dict,
@@ -18,21 +20,16 @@ export default function StartProjectForm({
     const form = new FormData(event.currentTarget);
 
     try {
-      const res = await fetch("/api/inquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.get("name"),
-          company: form.get("company"),
-          email: form.get("email"),
-          phone: form.get("phone"),
-          projectType: form.get("projectType"),
-          budget: form.get("budget"),
-          timeline: form.get("timeline"),
-          details: form.get("details"),
-        }),
+      await postJson("/api/inquiries", {
+        name: form.get("name"),
+        company: form.get("company"),
+        email: form.get("email"),
+        phone: form.get("phone"),
+        projectType: form.get("projectType"),
+        budget: form.get("budget"),
+        timeline: form.get("timeline"),
+        details: form.get("details"),
       });
-      if (!res.ok) throw new Error("request_failed");
       setStatus("success");
     } catch {
       setStatus("error");
@@ -48,37 +45,33 @@ export default function StartProjectForm({
     );
   }
 
-  const inputClass =
-    "w-full rounded-xl border border-line bg-bg px-4 py-3 text-sm text-ink outline-none transition focus:border-accent";
-  const labelClass = "mb-2 block text-sm font-medium text-ink";
-
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="name">{dict.startProject.nameLabel}</label>
-          <input id="name" name="name" required className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="name">{dict.startProject.nameLabel}</label>
+          <input id="name" name="name" required className={FORM_INPUT_CLASS} />
         </div>
         <div>
-          <label className={labelClass} htmlFor="company">{dict.startProject.companyLabel}</label>
-          <input id="company" name="company" className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="company">{dict.startProject.companyLabel}</label>
+          <input id="company" name="company" className={FORM_INPUT_CLASS} />
         </div>
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="email">{dict.startProject.emailLabel}</label>
-          <input id="email" name="email" type="email" dir="ltr" required className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="email">{dict.startProject.emailLabel}</label>
+          <input id="email" name="email" type="email" dir="ltr" required className={FORM_INPUT_CLASS} />
         </div>
         <div>
-          <label className={labelClass} htmlFor="phone">{dict.startProject.phoneLabel}</label>
-          <input id="phone" name="phone" type="tel" dir="ltr" required className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="phone">{dict.startProject.phoneLabel}</label>
+          <input id="phone" name="phone" type="tel" dir="ltr" required className={FORM_INPUT_CLASS} />
         </div>
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="projectType">{dict.startProject.projectTypeLabel}</label>
-        <select id="projectType" name="projectType" required className={inputClass}>
+        <label className={FORM_LABEL_CLASS} htmlFor="projectType">{dict.startProject.projectTypeLabel}</label>
+        <select id="projectType" name="projectType" required className={FORM_INPUT_CLASS}>
           {dict.startProject.projectTypes.map((type) => (
             <option key={type} value={type}>
               {type}
@@ -89,17 +82,17 @@ export default function StartProjectForm({
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label className={labelClass} htmlFor="budget">{dict.startProject.budgetLabel}</label>
-          <input id="budget" name="budget" placeholder={dict.startProject.budgetPlaceholder} className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="budget">{dict.startProject.budgetLabel}</label>
+          <input id="budget" name="budget" placeholder={dict.startProject.budgetPlaceholder} className={FORM_INPUT_CLASS} />
         </div>
         <div>
-          <label className={labelClass} htmlFor="timeline">{dict.startProject.timelineLabel}</label>
-          <input id="timeline" name="timeline" placeholder={dict.startProject.timelinePlaceholder} className={inputClass} />
+          <label className={FORM_LABEL_CLASS} htmlFor="timeline">{dict.startProject.timelineLabel}</label>
+          <input id="timeline" name="timeline" placeholder={dict.startProject.timelinePlaceholder} className={FORM_INPUT_CLASS} />
         </div>
       </div>
 
       <div>
-        <label className={labelClass} htmlFor="details">{dict.startProject.detailsLabel}</label>
+        <label className={FORM_LABEL_CLASS} htmlFor="details">{dict.startProject.detailsLabel}</label>
         <textarea
           id="details"
           name="details"
@@ -107,7 +100,7 @@ export default function StartProjectForm({
           rows={5}
           defaultValue={initialDetails}
           placeholder={dict.startProject.detailsPlaceholder}
-          className={inputClass}
+          className={FORM_INPUT_CLASS}
         />
       </div>
 

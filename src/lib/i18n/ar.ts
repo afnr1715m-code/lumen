@@ -379,7 +379,6 @@ const ar: Dictionary = {
     stepDetails: "التفاصيل",
     stepSchedule: "الموعد",
     stepReview: "المراجعة",
-    included: "ماذا يشمل",
     dateLabel: "اختر التاريخ",
     timeLabel: "اختر الوقت",
     noSlotsForDay: "لا توجد مواعيد متاحة في هذا اليوم، جرّب يومًا آخر.",

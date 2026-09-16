@@ -1,5 +1,6 @@
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { supabaseAdmin, unwrapRelation } from "@/lib/supabase/server";
 import { updateBookingStatusAction } from "../actions";
+import { formatRiyadhDateTime } from "@/lib/format";
 
 const STATUS_LABEL: Record<string, string> = {
   pending: "بانتظار التحويل",
@@ -36,12 +37,8 @@ export default async function AdminBookingsPage() {
 
       <div className="mt-6 space-y-4">
         {bookings.map((booking) => {
-          const consultationType = Array.isArray(booking.consultation_types)
-            ? booking.consultation_types[0]
-            : booking.consultation_types;
-          const slot = Array.isArray(booking.availability_slots)
-            ? booking.availability_slots[0]
-            : booking.availability_slots;
+          const consultationType = unwrapRelation(booking.consultation_types);
+          const slot = unwrapRelation(booking.availability_slots);
 
           return (
             <div key={booking.id} className="rounded-2xl border border-line bg-bg p-6">
@@ -55,13 +52,7 @@ export default async function AdminBookingsPage() {
                     {booking.customer_email} · {booking.customer_phone}
                   </div>
                   {slot?.starts_at && (
-                    <div className="mt-1 text-sm text-muted">
-                      {new Date(slot.starts_at).toLocaleString("ar-SA", {
-                        timeZone: "Asia/Riyadh",
-                        dateStyle: "full",
-                        timeStyle: "short",
-                      })}
-                    </div>
+                    <div className="mt-1 text-sm text-muted">{formatRiyadhDateTime(slot.starts_at)}</div>
                   )}
                   {booking.notes && <p className="mt-2 text-sm text-ink">{booking.notes}</p>}
                 </div>

@@ -1,20 +1,22 @@
 "use client";
 
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import type { ConsultationCategory, Dictionary } from "@/lib/i18n/types";
+import { postJson } from "@/lib/http";
+import { FORM_INPUT_CLASS, FORM_LABEL_CLASS } from "@/components/formStyles";
 
 interface Props {
   locale: Locale;
   dict: Dictionary;
   category: ConsultationCategory;
   consultationTypeId: string;
-  durationMinutes: number;
   priceLabel: string;
 }
 
 type Step = "details" | "schedule" | "review" | "confirmed";
+const STEP_ORDER: Step[] = ["details", "schedule", "review"];
 
 function todayIso(): string {
   return new Date().toISOString().slice(0, 10);
@@ -64,7 +66,7 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
     };
   }, [step, date, consultationTypeId]);
 
-  const minDate = useMemo(() => todayIso(), []);
+  const minDate = todayIso();
 
   const handleDetailsSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -76,20 +78,14 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
     setSubmitting(true);
     setError("");
     try {
-      const res = await fetch("/api/bookings/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          consultationTypeId,
-          isoDateTime: selectedSlot,
-          name,
-          email,
-          phone,
-          notes,
-        }),
+      const data = await postJson<{ reference: string }>("/api/bookings/confirm", {
+        consultationTypeId,
+        isoDateTime: selectedSlot,
+        name,
+        email,
+        phone,
+        notes,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "server_error");
       setReference(data.reference);
       setStep("confirmed");
     } catch {
@@ -98,10 +94,6 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
       setSubmitting(false);
     }
   };
-
-  const inputClass =
-    "w-full rounded-xl border border-line bg-bg px-4 py-3 text-sm text-ink outline-none transition focus:border-accent";
-  const labelClass = "mb-2 block text-sm font-medium text-ink";
 
   if (step === "confirmed") {
     return (
@@ -125,9 +117,8 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
     <div>
       <div className="mb-10 flex items-center gap-3 text-sm font-medium">
         {[b.stepDetails, b.stepSchedule, b.stepReview].map((label, i) => {
-          const stepKeys: Step[] = ["details", "schedule", "review"];
-          const isActive = stepKeys[i] === step;
-          const isDone = stepKeys.indexOf(step) > i;
+          const isActive = STEP_ORDER[i] === step;
+          const isDone = STEP_ORDER.indexOf(step) > i;
           return (
             <div key={label} className="flex items-center gap-3">
               <span
@@ -147,20 +138,20 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
       {step === "details" && (
         <form onSubmit={handleDetailsSubmit} className="space-y-5">
           <div>
-            <label className={labelClass} htmlFor="name">{b.nameLabel}</label>
-            <input id="name" required value={name} onChange={(e) => setName(e.target.value)} className={inputClass} />
+            <label className={FORM_LABEL_CLASS} htmlFor="name">{b.nameLabel}</label>
+            <input id="name" required value={name} onChange={(e) => setName(e.target.value)} className={FORM_INPUT_CLASS} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="email">{b.emailLabel}</label>
-            <input id="email" type="email" dir="ltr" required value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} />
+            <label className={FORM_LABEL_CLASS} htmlFor="email">{b.emailLabel}</label>
+            <input id="email" type="email" dir="ltr" required value={email} onChange={(e) => setEmail(e.target.value)} className={FORM_INPUT_CLASS} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="phone">{b.phoneLabel}</label>
-            <input id="phone" type="tel" dir="ltr" required value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} />
+            <label className={FORM_LABEL_CLASS} htmlFor="phone">{b.phoneLabel}</label>
+            <input id="phone" type="tel" dir="ltr" required value={phone} onChange={(e) => setPhone(e.target.value)} className={FORM_INPUT_CLASS} />
           </div>
           <div>
-            <label className={labelClass} htmlFor="notes">{b.notesLabel}</label>
-            <textarea id="notes" rows={3} placeholder={b.notesPlaceholder} value={notes} onChange={(e) => setNotes(e.target.value)} className={inputClass} />
+            <label className={FORM_LABEL_CLASS} htmlFor="notes">{b.notesLabel}</label>
+            <textarea id="notes" rows={3} placeholder={b.notesPlaceholder} value={notes} onChange={(e) => setNotes(e.target.value)} className={FORM_INPUT_CLASS} />
           </div>
           <button type="submit" className="w-full rounded-full bg-ink px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-accent">
             {b.continueButton}
@@ -171,20 +162,20 @@ export default function BookingFlow({ locale, dict, category, consultationTypeId
       {step === "schedule" && (
         <div className="space-y-6">
           <div>
-            <label className={labelClass} htmlFor="date">{b.dateLabel}</label>
+            <label className={FORM_LABEL_CLASS} htmlFor="date">{b.dateLabel}</label>
             <input
               id="date"
               type="date"
               min={minDate}
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className={inputClass}
+              className={FORM_INPUT_CLASS}
               dir="ltr"
             />
           </div>
 
           <div>
-            <span className={labelClass}>{b.timeLabel}</span>
+            <span className={FORM_LABEL_CLASS}>{b.timeLabel}</span>
             {loadingSlots ? (
               <p className="text-sm text-muted">…</p>
             ) : slots.length === 0 ? (

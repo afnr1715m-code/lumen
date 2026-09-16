@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { formatRiyadhDateTime } from "@/lib/format";
 
 function escapeHtml(value: string): string {
   return value
@@ -74,11 +75,7 @@ export async function notifyNewBooking(data: {
   phone: string;
   notes?: string | null;
 }) {
-  const when = new Date(data.isoDateTime).toLocaleString("ar-SA", {
-    timeZone: "Asia/Riyadh",
-    dateStyle: "full",
-    timeStyle: "short",
-  });
+  const when = formatRiyadhDateTime(data.isoDateTime);
   await sendNotification(
     `طلب حجز جديد بانتظار التحويل — ${escapeHtml(data.consultationTitle)}`,
     `

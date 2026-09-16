@@ -13,3 +13,11 @@ export function supabaseAdmin() {
   }
   return createClient(url, key, { auth: { persistSession: false } });
 }
+
+/**
+ * Supabase returns a to-one related row as either an object or a
+ * single-element array depending on the join — normalize to one shape.
+ */
+export function unwrapRelation<T>(value: T | T[] | null | undefined): T | null {
+  return (Array.isArray(value) ? value[0] : value) ?? null;
+}

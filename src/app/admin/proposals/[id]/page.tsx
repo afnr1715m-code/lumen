@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { formatCurrency } from "@/lib/format";
 import { addMilestoneAction, markMilestonePaidAction } from "../../actions";
 import { SITE_URL } from "@/lib/site";
 import CopyLinkButton from "./CopyLinkButton";
@@ -52,11 +53,7 @@ export default async function AdminProposalDetailPage({
           >
             <div>
               <div className="font-bold text-ink">{milestone.name}</div>
-              <div className="mt-1 text-sm text-muted">
-                {new Intl.NumberFormat("ar-SA", { style: "currency", currency: proposal.currency }).format(
-                  milestone.amount_cents / 100
-                )}
-              </div>
+              <div className="mt-1 text-sm text-muted">{formatCurrency(milestone.amount_cents, proposal.currency)}</div>
             </div>
             <div className="flex items-center gap-3">
               <span className="rounded-full bg-surface px-3 py-1 text-xs font-semibold text-muted">

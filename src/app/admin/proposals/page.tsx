@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { formatCurrency } from "@/lib/format";
 import { createProposalAction } from "../actions";
 
 interface ProposalRow {
@@ -71,9 +72,7 @@ export default async function AdminProposalsPage() {
                 <div className="mt-1 text-sm text-muted">{proposal.client_name}</div>
               </div>
               <div className="text-sm text-muted">
-                {new Intl.NumberFormat("ar-SA", { style: "currency", currency: proposal.currency }).format(
-                  total / 100
-                )}
+                {formatCurrency(total, proposal.currency)}
                 {" · "}
                 {paid}/{milestones.length} مراحل مدفوعة
               </div>

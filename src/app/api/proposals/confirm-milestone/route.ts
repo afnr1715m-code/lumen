@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase/server";
+import { supabaseAdmin, unwrapRelation } from "@/lib/supabase/server";
+import { formatCurrency } from "@/lib/format";
 import { notifyMilestonePaymentClaimed } from "@/lib/notify";
 
 export async function POST(request: Request) {
@@ -26,9 +27,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_status" }, { status: 409 });
   }
 
-  const proposal = Array.isArray(milestone.project_proposals)
-    ? milestone.project_proposals[0]
-    : milestone.project_proposals;
+  const proposal = unwrapRelation(milestone.project_proposals);
 
   const { error: updateError } = await supabase
     .from("project_milestones")
@@ -53,10 +52,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
 
-  const amountLabel = new Intl.NumberFormat("ar-SA", {
-    style: "currency",
-    currency: proposal?.currency ?? "SAR",
-  }).format(milestone.amount_cents / 100);
+  const amountLabel = formatCurrency(milestone.amount_cents, proposal?.currency ?? "SAR");
 
   await notifyMilestonePaymentClaimed({
     projectName: proposal?.project_name ?? "",
