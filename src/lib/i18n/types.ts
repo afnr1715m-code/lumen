@@ -82,12 +82,6 @@ export interface Dictionary {
     subtitle: string;
   };
   services: Service[];
-  productJourney: {
-    eyebrow: string;
-    title: string;
-    description: string;
-    steps: string[];
-  };
   whyLumen: {
     headline: string;
     subtitle: string;

@@ -168,13 +168,6 @@ const en: Dictionary = {
       priceFrom: "SAR 300/mo",
     },
   ],
-  productJourney: {
-    eyebrow: "One of Lumen's key differentiators",
-    title: "From Idea to Product",
-    description:
-      "For entrepreneurs and businesses with an idea who need a partner to turn it into a real product — Lumen takes on the full journey as a product-building partner, not just an execution contractor.",
-    steps: ["Idea", "Requirements", "Strategy", "UX", "UI", "Development", "Testing", "Launch", "Ongoing Development"],
-  },
   whyLumen: {
     headline: "More than just a technology company",
     subtitle: "Lumen brings strategy, design, technology, automation, and AI together in a single partnership.",

@@ -3,7 +3,6 @@ import { getDictionary } from "@/lib/i18n";
 import { notFound } from "next/navigation";
 import Hero from "@/components/Hero";
 import ServicesGrid from "@/components/ServicesGrid";
-import ProductJourney from "@/components/ProductJourney";
 import WhyLumen from "@/components/WhyLumen";
 import Process from "@/components/Process";
 import Portfolio from "@/components/Portfolio";
@@ -36,7 +35,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
       <Hero locale={typedLocale} dict={dict} />
       <ServicesGrid dict={dict} />
-      <ProductJourney dict={dict} />
       <WhyLumen dict={dict} />
       <Process dict={dict} />
       <Portfolio dict={dict} />
