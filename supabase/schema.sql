@@ -136,9 +136,11 @@ alter table project_milestones enable row level security;
 -- anon-key policies are required for writes. Only the two read-only
 -- lookups the public site needs directly are exposed to `anon`.
 
+drop policy if exists "consultation_types_public_read" on consultation_types;
 create policy "consultation_types_public_read" on consultation_types
     for select to anon using (is_active = true);
 
+drop policy if exists "availability_slots_public_read" on availability_slots;
 create policy "availability_slots_public_read" on availability_slots
     for select to anon using (true);
 
