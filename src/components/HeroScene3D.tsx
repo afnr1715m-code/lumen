@@ -13,7 +13,7 @@ import * as THREE from "three";
  * parallax so it reads as alive, not a static logo.
  */
 
-const GLOW_COLOR = new THREE.Color("#18e08c"); // deep, rich emerald rather than a mint/neon tint — reads as premium, not garish
+const GLOW_COLOR = new THREE.Color("#249e6b"); // muted brand emerald, not a saturated neon mint — glows via bloom without looking artificial
 const PARTICLE_COUNT = 640;
 const CONVERGE_SECONDS = 1.1;
 const GLYPH_SCALE = 1.6; // glyph footprint, scaled up now the canvas is full-bleed instead of a small box
@@ -212,7 +212,7 @@ export default function HeroScene3D() {
       <ambientLight intensity={0.4} />
       <ParticleGlyph pointer={pointer} />
       <EffectComposer>
-        <Bloom luminanceThreshold={0.15} luminanceSmoothing={0.7} intensity={1.3} mipmapBlur radius={0.5} />
+        <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.65} intensity={1} mipmapBlur radius={0.45} />
       </EffectComposer>
     </Canvas>
   );
