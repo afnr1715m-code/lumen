@@ -4,6 +4,7 @@ import type { Dictionary } from "@/lib/i18n/types";
 import { buttonClass } from "./buttonStyles";
 import HeroGlow from "./HeroGlow";
 import Reveal from "./Reveal";
+import HeroScene3D from "./HeroScene3DClient";
 
 export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
@@ -38,57 +39,9 @@ export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionar
         </div>
 
         <Reveal delay={150} className="relative mx-auto aspect-square w-full max-w-md">
-          <SystemGraphic />
+          <HeroScene3D />
         </Reveal>
       </div>
     </section>
-  );
-}
-
-function SystemGraphic() {
-  const nodes = [
-    { x: 50, y: 12 },
-    { x: 14, y: 40 },
-    { x: 86, y: 40 },
-    { x: 30, y: 78 },
-    { x: 70, y: 78 },
-    { x: 50, y: 50 },
-  ];
-  const edges: [number, number][] = [
-    [5, 0],
-    [5, 1],
-    [5, 2],
-    [5, 3],
-    [5, 4],
-    [1, 3],
-    [2, 4],
-  ];
-
-  return (
-    <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
-      {edges.map(([a, b], i) => (
-        <line
-          key={i}
-          x1={nodes[a].x}
-          y1={nodes[a].y}
-          x2={nodes[b].x}
-          y2={nodes[b].y}
-          stroke="var(--color-line)"
-          strokeWidth="0.5"
-        />
-      ))}
-      {nodes.map((n, i) => (
-        <circle
-          key={i}
-          cx={n.x}
-          cy={n.y}
-          r={i === 5 ? 5 : 3}
-          fill={i === 5 ? "var(--color-accent)" : "#ffffff"}
-          stroke={i === 5 ? "var(--color-accent)" : "var(--color-ink)"}
-          strokeWidth="1"
-          className={i === 5 ? "hero-node-pulse" : undefined}
-        />
-      ))}
-    </svg>
   );
 }
