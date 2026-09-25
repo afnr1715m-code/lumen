@@ -6,7 +6,8 @@ export default function Process({ dict }: { dict: Dictionary }) {
     <section id="process" className="border-b border-line bg-surface">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10 lg:py-24">
         <Reveal className="max-w-2xl">
-          <h2 className="text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.process.headline}</h2>
+          <div className="h-1 w-12 rounded-full bg-accent" aria-hidden="true" />
+          <h2 className="mt-5 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl">{dict.process.headline}</h2>
           <p className="mt-4 text-lg text-muted">{dict.process.subtitle}</p>
         </Reveal>
 
