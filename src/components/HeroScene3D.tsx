@@ -91,14 +91,13 @@ function randomPhases(count: number): Float32Array {
 }
 
 function scatteredOrigins(count: number): Float32Array {
-  // A wide, uniform box roughly matching the full-bleed hero's visible
-  // frustum, not a sphere shell — particles need to already be scattered
-  // across the whole screen, not clustered off to one side waiting to
-  // fly in from outside view.
+  // A wide, uniform box roughly matching the 3D band's visible frustum —
+  // it's a short, wide strip now rather than a full square viewport, so
+  // origins spread further horizontally than vertically.
   const origins = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    origins[i * 3] = (Math.random() - 0.5) * 9.5;
-    origins[i * 3 + 1] = (Math.random() - 0.5) * 5.2;
+    origins[i * 3] = (Math.random() - 0.5) * 13;
+    origins[i * 3 + 1] = (Math.random() - 0.5) * 4;
     origins[i * 3 + 2] = (Math.random() - 0.5) * 3.5;
   }
   return origins;

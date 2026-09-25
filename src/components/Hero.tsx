@@ -8,18 +8,10 @@ import HeroScene3D from "./HeroScene3DClient";
 
 export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
-    <section className="relative flex min-h-screen items-center overflow-hidden border-b border-line bg-dark text-white">
+    <section className="relative flex min-h-screen flex-col overflow-hidden border-b border-line bg-dark text-white">
       <HeroGlow />
 
-      <div className="pointer-events-none absolute inset-0">
-        <HeroScene3D />
-      </div>
-
-      {/* Darkens the text column so it stays readable over the particles
-          while the motion still reads clearly at the screen's edges. */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_50%_45%,rgba(11,15,23,0.88),rgba(11,15,23,0.55)_55%,transparent_85%)]" />
-
-      <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center px-6 py-24 text-center lg:px-10">
+      <div className="relative mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-6 pb-12 pt-28 text-center lg:px-10">
         <Reveal>
           <span className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/70">
             {dict.hero.eyebrow}
@@ -43,6 +35,14 @@ export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionar
             </Link>
           </div>
         </Reveal>
+      </div>
+
+      {/* A dedicated showcase band for the 3D scene, kept separate from the
+          text above it instead of sitting underneath it. */}
+      <div className="relative h-[42vh] min-h-[320px] w-full border-t border-white/10">
+        <div className="pointer-events-none absolute inset-0">
+          <HeroScene3D />
+        </div>
       </div>
     </section>
   );
