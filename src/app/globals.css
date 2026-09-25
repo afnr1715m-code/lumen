@@ -3,9 +3,9 @@
 :root {
   --color-ink: #0b0f17;
   --color-muted: #5b6472;
-  --color-bg: #ffffff;
-  --color-surface: #f7f7f6;
-  --color-line: #e7e7e5;
+  --color-bg: #f6f5f0;
+  --color-surface: #ecefe7;
+  --color-line: #dddecf;
   --color-accent: #0a6e3d;
   --color-accent-strong: #075c32;
   --color-accent-soft: #e4f3e9;
