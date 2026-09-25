@@ -49,7 +49,7 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          backgroundColor: "#0d1a14",
+          backgroundColor: "#183025",
           color: "#f5f6f8",
           fontFamily: fontFamily,
           direction: dir,
