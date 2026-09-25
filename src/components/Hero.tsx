@@ -15,6 +15,10 @@ export default function Hero({ locale, dict }: { locale: Locale; dict: Dictionar
         <HeroScene3D />
       </div>
 
+      {/* Darkens the text column so it stays readable over the particles
+          while the motion still reads clearly at the screen's edges. */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_50%_45%,rgba(11,15,23,0.88),rgba(11,15,23,0.55)_55%,transparent_85%)]" />
+
       <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center px-6 py-24 text-center lg:px-10">
         <Reveal>
           <span className="inline-flex items-center rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white/70">
