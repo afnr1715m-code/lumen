@@ -13,9 +13,10 @@ import * as THREE from "three";
  * parallax so it reads as alive, not a static logo.
  */
 
-const GLOW_COLOR = new THREE.Color("#34d399"); // brighter emerald than the flat UI accent — bloom needs headroom to read as "glowing"
-const PARTICLE_COUNT = 420;
-const CONVERGE_SECONDS = 2.4;
+const GLOW_COLOR = new THREE.Color("#3dffb0"); // vivid, saturated well past the flat UI accent — needs to read instantly against the dark hero
+const PARTICLE_COUNT = 640;
+const CONVERGE_SECONDS = 1.1;
+const GLYPH_SCALE = 1.6; // glyph footprint, scaled up now the canvas is full-bleed instead of a small box
 
 /** Evenly-spaced points along a polyline through the given vertices. */
 function sampleAlongPath(vertices: [number, number][], count: number): [number, number][] {
@@ -47,18 +48,18 @@ function sampleAlongPath(vertices: [number, number][], count: number): [number, 
 /** The "</>" glyph as three polylines: left chevron, slash, right chevron. */
 function buildCodeGlyphTargets(count: number): Float32Array {
   const leftChevron: [number, number][] = [
-    [-0.55, 0.55],
-    [-1.35, 0],
-    [-0.55, -0.55],
+    [-0.55 * GLYPH_SCALE, 0.55 * GLYPH_SCALE],
+    [-1.35 * GLYPH_SCALE, 0],
+    [-0.55 * GLYPH_SCALE, -0.55 * GLYPH_SCALE],
   ];
   const slash: [number, number][] = [
-    [-0.28, -0.75],
-    [0.28, 0.75],
+    [-0.28 * GLYPH_SCALE, -0.75 * GLYPH_SCALE],
+    [0.28 * GLYPH_SCALE, 0.75 * GLYPH_SCALE],
   ];
   const rightChevron: [number, number][] = [
-    [0.55, 0.55],
-    [1.35, 0],
-    [0.55, -0.55],
+    [0.55 * GLYPH_SCALE, 0.55 * GLYPH_SCALE],
+    [1.35 * GLYPH_SCALE, 0],
+    [0.55 * GLYPH_SCALE, -0.55 * GLYPH_SCALE],
   ];
 
   // Split the particle budget proportional to each stroke's own length so
@@ -90,14 +91,15 @@ function randomPhases(count: number): Float32Array {
 }
 
 function scatteredOrigins(count: number): Float32Array {
+  // A wide, uniform box roughly matching the full-bleed hero's visible
+  // frustum, not a sphere shell — particles need to already be scattered
+  // across the whole screen, not clustered off to one side waiting to
+  // fly in from outside view.
   const origins = new Float32Array(count * 3);
   for (let i = 0; i < count; i++) {
-    const r = 3.2 + Math.random() * 1.8;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(2 * Math.random() - 1);
-    origins[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-    origins[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-    origins[i * 3 + 2] = r * Math.cos(phi);
+    origins[i * 3] = (Math.random() - 0.5) * 9.5;
+    origins[i * 3 + 1] = (Math.random() - 0.5) * 5.2;
+    origins[i * 3 + 2] = (Math.random() - 0.5) * 3.5;
   }
   return origins;
 }
@@ -155,12 +157,12 @@ function ParticleGlyph({ pointer }: { pointer: React.RefObject<{ x: number; y: n
       }
       posAttr.needsUpdate = true;
     } else if (!reduceMotion) {
-      // Settled — a small living drift around each particle's resting spot.
+      // Settled — a livelier drift around each particle's resting spot.
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const ix = i * 3;
-        const jitter = Math.sin(t * 1.4 + phases[i]) * 0.02;
+        const jitter = Math.sin(t * 2.2 + phases[i]) * 0.05;
         arr[ix] = targets[ix] + jitter;
-        arr[ix + 1] = targets[ix + 1] + Math.cos(t * 1.1 + phases[i]) * 0.02;
+        arr[ix + 1] = targets[ix + 1] + Math.cos(t * 1.8 + phases[i]) * 0.05;
         arr[ix + 2] = targets[ix + 2] + jitter;
       }
       posAttr.needsUpdate = true;
@@ -169,18 +171,18 @@ function ParticleGlyph({ pointer }: { pointer: React.RefObject<{ x: number; y: n
     const g = groupRef.current;
     if (!g) return;
     if (!reduceMotion) {
-      g.rotation.y += delta * 0.08;
+      g.rotation.y += delta * 0.25;
     }
-    const targetX = pointer.current.y * 0.18;
-    const targetZ = -pointer.current.x * 0.18;
-    g.rotation.x += (targetX - g.rotation.x) * 0.04;
-    g.rotation.z += (targetZ - g.rotation.z) * 0.04;
+    const targetX = pointer.current.y * 0.22;
+    const targetZ = -pointer.current.x * 0.22;
+    g.rotation.x += (targetX - g.rotation.x) * 0.06;
+    g.rotation.z += (targetZ - g.rotation.z) * 0.06;
   });
 
   return (
     <group ref={groupRef}>
       <points ref={pointsRef} geometry={geometry}>
-        <pointsMaterial color={GLOW_COLOR} size={0.055} sizeAttenuation transparent opacity={0.95} toneMapped={false} />
+        <pointsMaterial color={GLOW_COLOR} size={0.075} sizeAttenuation transparent opacity={1} toneMapped={false} />
       </points>
     </group>
   );
@@ -203,7 +205,7 @@ export default function HeroScene3D() {
 
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 45 }}
+      camera={{ position: [0, 0, 5], fov: 50 }}
       dpr={[1, 2]}
       gl={{ alpha: true, antialias: true }}
       style={{ background: "transparent" }}
@@ -211,7 +213,7 @@ export default function HeroScene3D() {
       <ambientLight intensity={0.4} />
       <ParticleGlyph pointer={pointer} />
       <EffectComposer>
-        <Bloom luminanceThreshold={0.1} luminanceSmoothing={0.9} intensity={1.2} mipmapBlur radius={0.6} />
+        <Bloom luminanceThreshold={0.03} luminanceSmoothing={0.8} intensity={2.2} mipmapBlur radius={0.8} />
       </EffectComposer>
     </Canvas>
   );
