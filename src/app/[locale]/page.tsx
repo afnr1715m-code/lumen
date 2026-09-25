@@ -1,6 +1,7 @@
 import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n";
 import { notFound } from "next/navigation";
+import { SITE_URL } from "@/lib/site";
 import Hero from "@/components/Hero";
 import ServicesGrid from "@/components/ServicesGrid";
 import WhyLumen from "@/components/WhyLumen";
@@ -27,11 +28,29 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     })),
   };
 
+  const servicesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: dict.services.map((service, i) => ({
+      "@type": "Service",
+      position: i + 1,
+      name: service.title,
+      description: service.description,
+      provider: { "@type": "ProfessionalService", name: dict.nav.brand, url: `${SITE_URL}/${typedLocale}` },
+      areaServed: "SA",
+      url: `${SITE_URL}/${typedLocale}/#services`,
+    })),
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(servicesJsonLd) }}
       />
       <Hero locale={typedLocale} dict={dict} />
       <ServicesGrid dict={dict} />
