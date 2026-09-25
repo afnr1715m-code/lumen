@@ -15,7 +15,7 @@ export default function ServicesGrid({ dict }: { dict: Dictionary }) {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.services.map((service, i) => (
             <Reveal key={service.slug} delay={i * 60}>
-              <div className="group h-full rounded-2xl border border-line bg-bg p-7 transition duration-300 ease-out hover:-translate-y-1 hover:border-accent hover:shadow-[0_20px_50px_-25px_rgba(59,82,255,0.35)]">
+              <div className="group h-full rounded-2xl border border-line bg-bg p-7 transition duration-300 ease-out hover:-translate-y-1 hover:border-accent hover:shadow-[0_20px_50px_-25px_rgba(10,110,61,0.35)]">
                 <span className="text-sm font-semibold text-accent">{service.number}</span>
                 <h3 className="mt-3 text-lg font-bold text-ink">{service.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{service.description}</p>

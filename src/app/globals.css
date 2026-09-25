@@ -6,8 +6,9 @@
   --color-bg: #ffffff;
   --color-surface: #f7f7f6;
   --color-line: #e7e7e5;
-  --color-accent: #3b52ff;
-  --color-accent-strong: #2a3ee0;
+  --color-accent: #0a6e3d;
+  --color-accent-strong: #075c32;
+  --color-accent-soft: #e4f3e9;
   --color-dark: #0b0f17;
 }
 
@@ -19,6 +20,7 @@
   --color-line: var(--color-line);
   --color-accent: var(--color-accent);
   --color-accent-strong: var(--color-accent-strong);
+  --color-accent-soft: var(--color-accent-soft);
   --color-dark: var(--color-dark);
   --font-sans-ar: var(--font-tajawal);
   --font-sans-en: var(--font-inter);

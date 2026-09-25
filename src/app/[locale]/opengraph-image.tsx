@@ -57,7 +57,7 @@ export default async function OgImage({ params }: { params: Promise<{ locale: st
       >
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <svg width="52" height="52" viewBox="0 0 56 56" fill="none">
-            <g stroke="#3b52ff" strokeWidth="4.6" strokeLinecap="round">
+            <g stroke="#0a6e3d" strokeWidth="4.6" strokeLinecap="round">
               <path d="M44.85 42.14 A22 22 0 1 1 42.14 11.15" />
               <path d="M47.05 17 A22 22 0 0 1 48.67 35.52" />
             </g>
