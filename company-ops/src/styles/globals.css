@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  --color-ink: #0f172a;
+  --color-muted: #64748b;
+  --color-bg: #f6f7f5;
+  --color-surface: #ffffff;
+  --color-line: #e2e5e0;
+
+  --color-accent: #0a6e3d;
+  --color-accent-strong: #075c32;
+  --color-accent-soft: #e4f3e9;
+
+  --color-danger: #dc2626;
+  --color-danger-soft: #fee2e2;
+  --color-warning: #d97706;
+  --color-warning-soft: #fef3c7;
+  --color-info: #2563eb;
+  --color-info-soft: #dbeafe;
+  --color-success: #0a6e3d;
+  --color-success-soft: #e4f3e9;
+}
+
+@theme inline {
+  --color-ink: var(--color-ink);
+  --color-muted: var(--color-muted);
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-line: var(--color-line);
+  --color-accent: var(--color-accent);
+  --color-accent-strong: var(--color-accent-strong);
+  --color-accent-soft: var(--color-accent-soft);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-info: var(--color-info);
+  --color-info-soft: var(--color-info-soft);
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --font-sans: "Tajawal", system-ui, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+* {
+  scrollbar-width: thin;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+html[dir="rtl"] .slide-in-panel {
+  animation: slide-in-rtl 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-in-rtl {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fade-in 150ms ease-out;
+}
