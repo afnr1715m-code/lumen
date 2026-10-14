@@ -465,9 +465,9 @@ export const employees: Employee[] = [
 ];
 
 export const users: User[] = [
-  { id: "user_manager", name: "منير العتيبي", role: "manager", avatarInitials: "مع", teamId: null, title: "مدير العمليات" },
+  { id: "user_manager", name: "رهف", role: "manager", avatarInitials: "ره", teamId: null, title: "مدير العمليات" },
+  { id: "user_coord_1", name: "عبدالرحمن", role: "coordinator", avatarInitials: "عر", teamId: null, title: "مسؤول مباشر" },
   { id: "emp_sup_1", name: "سلطان الحربي", role: "supervisor", avatarInitials: "سح", teamId: "team_a", title: "مشرف تشغيل" },
-  { id: "emp_4", name: "ريان المطيري", role: "employee", avatarInitials: "رم", teamId: "team_a", title: "فني تشغيل" },
   { id: "emp_16", name: "طارق المالكي", role: "customer_service", avatarInitials: "طم", teamId: "team_e", title: "موظف خدمة عملاء" },
 ];
 

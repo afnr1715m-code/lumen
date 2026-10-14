@@ -5,14 +5,16 @@ import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import { useOpsStore } from "@/store/opsStore";
 import { useAuthStore } from "@/store/authStore";
+import { users } from "@/data/roster";
 import { TASK_PRIORITY_LABEL, TASK_PRIORITY_TONE, TASK_STATUS_LABEL } from "@/lib/labels";
 import { formatArabicDate } from "@/utils/date";
-import type { TaskStatus } from "@/types/domain";
+import type { Task, TaskStatus } from "@/types/domain";
 
 export default function OperationsHomePage() {
   const teams = useOpsStore((s) => s.teams);
   const tasks = useOpsStore((s) => s.tasks);
   const setTaskStatus = useOpsStore((s) => s.setTaskStatus);
+  const setTeamStatus = useOpsStore((s) => s.setTeamStatus);
   const currentUser = useAuthStore((s) => s.currentUser);
 
   const team = teams.find((t) => t.id === currentUser?.teamId);
@@ -22,43 +24,91 @@ export default function OperationsHomePage() {
     [tasks, currentUser]
   );
 
+  function assignerRole(t: Task) {
+    return users.find((u) => u.id === t.assignedBy)?.role;
+  }
+  const tasksFromCoordinator = myTasks.filter((t) => assignerRole(t) === "coordinator");
+  const tasksFromManager = myTasks.filter((t) => assignerRole(t) !== "coordinator");
+
   return (
     <AppShell title={team ? `الرئيسية — ${team.name}` : "الرئيسية"}>
-      <Card title="المهام المرسلة من المدير">
-        {myTasks.length === 0 ? (
-          <EmptyState label="لا توجد مهام مرسلة لك حاليًا" />
-        ) : (
-          <div className="space-y-3">
-            {myTasks.map((t) => (
-              <div key={t.id} className="rounded-xl border border-line p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-ink">{t.title}</p>
-                    {t.description && <p className="mt-1 text-sm text-muted">{t.description}</p>}
-                  </div>
-                  <div className="flex shrink-0 items-center gap-2">
-                    <StatusBadge label={TASK_PRIORITY_LABEL[t.priority]} tone={TASK_PRIORITY_TONE[t.priority]} />
-                    <select
-                      value={t.status}
-                      onChange={(e) => setTaskStatus(t.id, e.target.value as TaskStatus, currentUser?.id ?? "")}
-                      className="rounded-lg border border-line bg-surface px-2 py-1 text-xs outline-none focus:border-accent"
-                    >
-                      {Object.entries(TASK_STATUS_LABEL).map(([value, label]) => (
-                        <option key={value} value={value}>
-                          {label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <p className="mt-2 text-xs text-muted">
-                  {formatArabicDate(t.dueDate)} · {t.dueTime}
-                </p>
-              </div>
-            ))}
+      {team && (
+        <Card title="حالة تشغيل الفريق" className="mb-6">
+          <p className="mb-3 text-sm text-muted">يحدد هذا الزر حالة فريقك عند المدير (الفرق النشطة).</p>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setTeamStatus(team.id, "active", currentUser?.id ?? "")}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                team.status === "active" ? "bg-success text-white" : "bg-bg text-muted hover:text-ink"
+              }`}
+            >
+              نشط
+            </button>
+            <button
+              type="button"
+              onClick={() => setTeamStatus(team.id, "stopped", currentUser?.id ?? "")}
+              className={`rounded-full px-5 py-2 text-sm font-semibold transition ${
+                team.status !== "active" ? "bg-danger text-white" : "bg-bg text-muted hover:text-ink"
+              }`}
+            >
+              غير نشط
+            </button>
           </div>
-        )}
-      </Card>
+        </Card>
+      )}
+
+      <div className="space-y-6">
+        <Card title="المهام من المدير">
+          <TaskList tasks={tasksFromManager} setTaskStatus={setTaskStatus} currentUserId={currentUser?.id ?? ""} />
+        </Card>
+        <Card title="المهام من المسؤول المباشر">
+          <TaskList tasks={tasksFromCoordinator} setTaskStatus={setTaskStatus} currentUserId={currentUser?.id ?? ""} />
+        </Card>
+      </div>
     </AppShell>
+  );
+}
+
+function TaskList({
+  tasks,
+  setTaskStatus,
+  currentUserId,
+}: {
+  tasks: Task[];
+  setTaskStatus: (id: string, status: TaskStatus, actorId: string) => void;
+  currentUserId: string;
+}) {
+  if (tasks.length === 0) return <EmptyState label="لا توجد مهام مرسلة لك حاليًا" />;
+  return (
+    <div className="space-y-3">
+      {tasks.map((t) => (
+        <div key={t.id} className="rounded-xl border border-line p-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-ink">{t.title}</p>
+              {t.description && <p className="mt-1 text-sm text-muted">{t.description}</p>}
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <StatusBadge label={TASK_PRIORITY_LABEL[t.priority]} tone={TASK_PRIORITY_TONE[t.priority]} />
+              <select
+                value={t.status}
+                onChange={(e) => setTaskStatus(t.id, e.target.value as TaskStatus, currentUserId)}
+                className="rounded-lg border border-line bg-surface px-2 py-1 text-xs outline-none focus:border-accent"
+              >
+                {Object.entries(TASK_STATUS_LABEL).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <p className="mt-2 text-xs text-muted">
+            {formatArabicDate(t.dueDate)} · {t.dueTime}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 }

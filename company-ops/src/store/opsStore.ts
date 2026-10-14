@@ -9,6 +9,7 @@ import type {
   CustomerServiceReport,
   DailyReport,
   Employee,
+  ManagerReport,
   PayrollAdjustment,
   PersonalTask,
   Product,
@@ -20,6 +21,7 @@ import type {
   TaskPriority,
   TaskStatus,
   Team,
+  TeamStatus,
 } from "@/types/domain";
 import { employees as seedEmployees, teams as seedTeams } from "@/data/roster";
 import { tasks as seedTasks } from "@/data/tasks";
@@ -31,10 +33,12 @@ import { products as seedProducts } from "@/data/products";
 import { clients as seedClients } from "@/data/clients";
 import { supervisorReports as seedSupervisorReports } from "@/data/supervisorReports";
 import { payrollAdjustments as seedPayrollAdjustments } from "@/data/payroll";
+import { shiftReports as seedShiftReports } from "@/data/shiftReports";
 import { personalTasks as seedPersonalTasks } from "@/data/personalTasks";
 import { customerServiceReports as seedCustomerServiceReports } from "@/data/customerServiceReports";
 import { complaints as seedComplaints } from "@/data/complaints";
 import { suggestions as seedSuggestions } from "@/data/suggestions";
+import { managerReports as seedManagerReports } from "@/data/managerReports";
 import { computeNotifications } from "@/lib/automation";
 import { makeId } from "@/utils/id";
 import { isoDateTime, todayISO } from "@/utils/date";
@@ -56,24 +60,28 @@ interface OpsState {
   customerServiceReports: CustomerServiceReport[];
   complaints: Complaint[];
   suggestions: Suggestion[];
+  managerReports: ManagerReport[];
   notifications: AppNotification[];
   auditLog: AuditLogEntry[];
 
   refreshNotifications: () => void;
   addAuditEntry: (actorId: string, action: string) => void;
 
-  addTask: (task: Omit<Task, "id" | "createdAt" | "status">, actorId: string) => void;
+  addTask: (task: Omit<Task, "id" | "createdAt" | "status" | "assignedBy">, actorId: string) => void;
   setTaskStatus: (id: string, status: TaskStatus, actorId: string) => void;
   setTaskPriority: (id: string, priority: TaskPriority, actorId: string) => void;
 
   addCalendarEvent: (event: Omit<CalendarEvent, "id">, actorId: string) => void;
 
+  setTeamStatus: (teamId: string, status: TeamStatus, actorId: string) => void;
+
   addEmployee: (employee: Omit<Employee, "id">, actorId: string) => void;
   updateEmployee: (id: string, patch: Omit<Employee, "id">, actorId: string) => void;
 
-  addProduct: (product: Omit<Product, "id">, actorId: string) => void;
-  updateProduct: (id: string, patch: Omit<Product, "id">, actorId: string) => void;
+  addProduct: (product: Omit<Product, "id" | "currentStock">, actorId: string) => void;
+  updateProduct: (id: string, patch: Omit<Product, "id" | "currentStock">, actorId: string) => void;
   deleteProduct: (id: string, actorId: string) => void;
+  logProductUsage: (id: string, quantityUsed: number, actorId: string) => void;
 
   updatePayrollAdjustment: (employeeId: string, patch: Omit<PayrollAdjustment, "employeeId">, actorId: string) => void;
 
@@ -97,6 +105,8 @@ interface OpsState {
 
   addSuggestion: (suggestion: Omit<Suggestion, "id" | "createdAt">, actorId: string) => void;
 
+  addManagerReport: (report: Omit<ManagerReport, "id" | "createdAt">, actorId: string) => void;
+
   markNotificationRead: (id: string) => void;
   markAllNotificationsRead: () => void;
   addManualNotification: (
@@ -117,11 +127,12 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
   clients: seedClients,
   supervisorReports: seedSupervisorReports,
   payrollAdjustments: seedPayrollAdjustments,
-  shiftReports: [],
+  shiftReports: seedShiftReports,
   personalTasks: seedPersonalTasks,
   customerServiceReports: seedCustomerServiceReports,
   complaints: seedComplaints,
   suggestions: seedSuggestions,
+  managerReports: seedManagerReports,
   notifications: computeNotifications({
     employees: seedEmployees,
     teams: seedTeams,
@@ -157,7 +168,7 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
   },
 
   addTask: (task, actorId) => {
-    const newTask: Task = { ...task, id: makeId("task"), createdAt: isoDateTime(new Date()), status: "لم تبدأ" };
+    const newTask: Task = { ...task, assignedBy: actorId, id: makeId("task"), createdAt: isoDateTime(new Date()), status: "لم تبدأ" };
     set((state) => ({ tasks: [newTask, ...state.tasks] }));
     get().addAuditEntry(actorId, `أضاف مهمة جديدة: ${task.title}`);
     get().refreshNotifications();
@@ -181,6 +192,11 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
     get().addAuditEntry(actorId, `أضاف موعدًا: ${event.title}`);
   },
 
+  setTeamStatus: (teamId, status, actorId) => {
+    set((state) => ({ teams: state.teams.map((t) => (t.id === teamId ? { ...t, status } : t)) }));
+    get().addAuditEntry(actorId, `غيّر حالة تشغيل الفريق إلى "${status === "active" ? "نشط" : "غير نشط"}"`);
+  },
+
   addEmployee: (employee, actorId) => {
     const newEmployee: Employee = { ...employee, id: makeId("emp") };
     set((state) => ({ employees: [...state.employees, newEmployee] }));
@@ -195,14 +211,19 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
   },
 
   addProduct: (product, actorId) => {
-    const newProduct: Product = { ...product, id: makeId("prod") };
+    // Remaining stock always starts equal to the quantity the manager just
+    // set — nothing has been used yet.
+    const newProduct: Product = { ...product, currentStock: product.quantity, id: makeId("prod") };
     set((state) => ({ products: [...state.products, newProduct] }));
     get().addAuditEntry(actorId, `أضاف صنفًا للمخزون: ${product.name}`);
     get().refreshNotifications();
   },
 
   updateProduct: (id, patch, actorId) => {
-    set((state) => ({ products: state.products.map((p) => (p.id === id ? { ...patch, id } : p)) }));
+    // Editing the quantity represents the manager restocking/recounting the
+    // item, so the remaining stock resets to match it. Usage logged by
+    // supervisors is what depletes it again from there.
+    set((state) => ({ products: state.products.map((p) => (p.id === id ? { ...patch, currentStock: patch.quantity, id } : p)) }));
     get().addAuditEntry(actorId, `عدّل صنف المخزون: ${patch.name}`);
     get().refreshNotifications();
   },
@@ -211,6 +232,15 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
     const product = get().products.find((p) => p.id === id);
     set((state) => ({ products: state.products.filter((p) => p.id !== id) }));
     get().addAuditEntry(actorId, `حذف صنف المخزون: ${product?.name ?? id}`);
+    get().refreshNotifications();
+  },
+
+  logProductUsage: (id, quantityUsed, actorId) => {
+    const product = get().products.find((p) => p.id === id);
+    set((state) => ({
+      products: state.products.map((p) => (p.id === id ? { ...p, currentStock: Math.max(0, p.currentStock - quantityUsed) } : p)),
+    }));
+    get().addAuditEntry(actorId, `سجّل استخدام ${quantityUsed} ${product?.unit ?? ""} من صنف: ${product?.name ?? id}`);
     get().refreshNotifications();
   },
 
@@ -284,8 +314,61 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
 
   submitShiftReport: (report, actorId) => {
     const newReport: ShiftReport = { ...report, id: makeId("shift"), submittedAt: isoDateTime(new Date()) };
-    set((state) => ({ shiftReports: [newReport, ...state.shiftReports] }));
-    get().addAuditEntry(actorId, `أرسل تقرير الشفت لتاريخ ${report.date}`);
+    const absentNames: string[] = [];
+    set((state) => {
+      // The supervisor's attendance picks for this shift become the real
+      // attendance records too, so the manager's attendance views reflect
+      // what was actually submitted in the report — not a separate step.
+      const attendanceRecords = [...state.attendanceRecords];
+      const payrollAdjustments = [...state.payrollAdjustments];
+      for (const emp of report.employees) {
+        const idx = attendanceRecords.findIndex((a) => a.employeeId === emp.employeeId && a.date === report.date);
+        const record: AttendanceRecord = {
+          id: idx >= 0 ? attendanceRecords[idx].id : makeId("att"),
+          employeeId: emp.employeeId,
+          date: report.date,
+          status: emp.attendance,
+          checkIn: emp.attendance === "absent" ? null : "08:00",
+          checkOut: emp.attendance === "absent" ? null : "16:00",
+        };
+        if (idx >= 0) attendanceRecords[idx] = record;
+        else attendanceRecords.push(record);
+
+        // An absence automatically deducts 3.85% of the employee's salary
+        // (~ one working day out of 26) from their payroll.
+        if (emp.attendance === "absent") {
+          const employee = state.employees.find((e) => e.id === emp.employeeId);
+          if (employee) {
+            absentNames.push(employee.name);
+            const deductionAmount = Math.round(employee.salary * 0.0385);
+            const payrollIdx = payrollAdjustments.findIndex((p) => p.employeeId === emp.employeeId);
+            if (payrollIdx >= 0) {
+              payrollAdjustments[payrollIdx] = {
+                ...payrollAdjustments[payrollIdx],
+                absenceDeduction: payrollAdjustments[payrollIdx].absenceDeduction + deductionAmount,
+              };
+            } else {
+              payrollAdjustments.push({
+                employeeId: emp.employeeId,
+                advances: 0,
+                deductions: 0,
+                mudadFee: 0,
+                absenceDeduction: deductionAmount,
+                violations: 0,
+                notes: "",
+              });
+            }
+          }
+        }
+      }
+      return { shiftReports: [newReport, ...state.shiftReports], attendanceRecords, payrollAdjustments };
+    });
+    get().addAuditEntry(
+      actorId,
+      absentNames.length > 0
+        ? `أرسل تقرير الشفت لتاريخ ${report.date} — تم خصم 3.85% من راتب: ${absentNames.join("، ")} (غياب)`
+        : `أرسل تقرير الشفت لتاريخ ${report.date}`
+    );
   },
 
   addPersonalTask: (task, actorId) => {
@@ -320,6 +403,12 @@ export const useOpsStore = create<OpsState>()((set, get) => ({
     const newSuggestion: Suggestion = { ...suggestion, id: makeId("sugg"), createdAt: isoDateTime(new Date()) };
     set((state) => ({ suggestions: [newSuggestion, ...state.suggestions] }));
     get().addAuditEntry(actorId, `أضاف اقتراحًا: ${suggestion.title}`);
+  },
+
+  addManagerReport: (report, actorId) => {
+    const newReport: ManagerReport = { ...report, id: makeId("mrep"), createdAt: isoDateTime(new Date()) };
+    set((state) => ({ managerReports: [newReport, ...state.managerReports] }));
+    get().addAuditEntry(actorId, `أرسل تقريرًا للمسؤول المباشر بتاريخ ${report.date}`);
   },
 
   markNotificationRead: (id) => {

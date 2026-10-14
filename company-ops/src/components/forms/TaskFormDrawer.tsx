@@ -12,14 +12,22 @@ import type { TaskPriority, TaskRecurrence } from "@/types/domain";
 
 const ASSIGNEES = [...users, ...employees.filter((e) => !users.some((u) => u.id === e.id))];
 
-export default function TaskFormDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
+export default function TaskFormDrawer({
+  open,
+  onClose,
+  defaultDate,
+}: {
+  open: boolean;
+  onClose: () => void;
+  defaultDate?: string;
+}) {
   const addTask = useOpsStore((s) => s.addTask);
   const currentUser = useAuthStore((s) => s.currentUser);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [assigneeId, setAssigneeId] = useState(currentUser?.id ?? ASSIGNEES[0]?.id ?? "");
   const [priority, setPriority] = useState<TaskPriority>("medium");
-  const [dueDate, setDueDate] = useState(todayISO());
+  const [dueDate, setDueDate] = useState(defaultDate ?? todayISO());
   const [dueTime, setDueTime] = useState("12:00");
   const [recurrence, setRecurrence] = useState<TaskRecurrence>("none");
   const [notes, setNotes] = useState("");
@@ -28,7 +36,7 @@ export default function TaskFormDrawer({ open, onClose }: { open: boolean; onClo
     setTitle("");
     setDescription("");
     setPriority("medium");
-    setDueDate(todayISO());
+    setDueDate(defaultDate ?? todayISO());
     setDueTime("12:00");
     setRecurrence("none");
     setNotes("");

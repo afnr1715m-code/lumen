@@ -110,7 +110,7 @@ export function computeNotifications(input: AutomationInput): AppNotification[] 
       notifications.push({
         id: `notif_stock_${product.id}`,
         title: "المنتج يحتاج إعادة طلب",
-        description: `${product.name} — الكمية الحالية ${product.currentStock} ${product.unit}، أقل من أو تساوي الحد الأدنى (${product.minimumStock}).`,
+        description: `${product.name} — المتبقي ${product.currentStock} ${product.unit}، أقل من أو تساوي الحد الأدنى (${product.minimumStock}).`,
         priority: "follow_up",
         date: now,
         module: "inventory",

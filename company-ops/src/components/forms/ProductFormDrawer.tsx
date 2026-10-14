@@ -6,7 +6,7 @@ import { useOpsStore } from "@/store/opsStore";
 import { useAuthStore } from "@/store/authStore";
 import type { Product } from "@/types/domain";
 
-const EMPTY_FORM = { name: "", unit: "", currentStock: 0, minimumStock: 0, notes: "" };
+const EMPTY_FORM = { name: "", unit: "", quantity: 0, minimumStock: 0, notes: "" };
 
 export default function ProductFormDrawer({
   open,
@@ -26,7 +26,11 @@ export default function ProductFormDrawer({
 
   useEffect(() => {
     if (!open) return;
-    setForm(product ? { ...product } : EMPTY_FORM);
+    setForm(
+      product
+        ? { name: product.name, unit: product.unit, quantity: product.quantity, minimumStock: product.minimumStock, notes: product.notes }
+        : EMPTY_FORM
+    );
   }, [open, product]);
 
   function set<K extends keyof typeof form>(key: K, value: (typeof form)[K]) {
@@ -54,13 +58,18 @@ export default function ProductFormDrawer({
           <Field label="الوحدة">
             <Input value={form.unit} onChange={(e) => set("unit", e.target.value)} placeholder="جالون / قطعة / كرتون" />
           </Field>
-          <Field label="الكمية الحالية">
-            <Input type="number" min={0} value={form.currentStock} onChange={(e) => set("currentStock", Number(e.target.value))} />
+          <Field label="الكمية">
+            <Input type="number" min={0} value={form.quantity} onChange={(e) => set("quantity", Number(e.target.value))} />
           </Field>
         </div>
         <Field label="الحد الأدنى للمخزون">
           <Input type="number" min={0} value={form.minimumStock} onChange={(e) => set("minimumStock", Number(e.target.value))} />
         </Field>
+        {isEdit && (
+          <p className="text-xs text-muted">
+            تنبيه: تغيير الكمية هنا يعيد ضبط "المتبقي" ليطابقها — استخدمي هذا لإعادة التخزين، مو لتسجيل استخدام.
+          </p>
+        )}
         <Field label="ملاحظات">
           <Textarea value={form.notes} onChange={(e) => set("notes", e.target.value)} />
         </Field>

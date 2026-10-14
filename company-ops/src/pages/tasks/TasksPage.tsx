@@ -31,7 +31,9 @@ export default function TasksPage() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const isManager = currentUser?.role === "manager";
+  // Manager and coordinator both assign tasks to others, so they get the
+  // same permissions here: editable priority, read-only status badge.
+  const isManager = currentUser?.role === "manager" || currentUser?.role === "coordinator";
 
   const visibleTasks = useMemo(() => {
     const isSupervisor = currentUser?.role === "supervisor";
@@ -160,7 +162,7 @@ export default function TasksPage() {
               <MonthCalendar markers={markers} onDayClick={setSelectedDate} selectedDate={selectedDate} />
             </div>
             <div>
-              <p className="mb-3 text-sm font-bold text-ink">{selectedDate ? formatArabicDate(selectedDate) : "اختاري يومًا"}</p>
+              <p className="mb-3 text-sm font-bold text-ink">{selectedDate ? formatArabicDate(selectedDate) : "اختر يومًا"}</p>
               {tasksOnSelectedDate.length === 0 ? (
                 <p className="text-sm text-muted">لا توجد مهام في هذا اليوم</p>
               ) : (

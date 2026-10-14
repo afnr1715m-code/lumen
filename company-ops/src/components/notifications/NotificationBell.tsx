@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Bell } from "lucide-react";
 import { useOpsStore } from "@/store/opsStore";
+import { useAuthStore } from "@/store/authStore";
 import { NOTIFICATION_PRIORITY_TONE } from "@/lib/labels";
 import StatusBadge from "@/components/ui/StatusBadge";
 import { NOTIFICATION_PRIORITY_LABEL } from "@/lib/labels";
@@ -10,8 +11,14 @@ import EmptyState from "@/components/ui/EmptyState";
 export default function NotificationBell() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const notifications = useOpsStore((s) => s.notifications);
+  const allNotifications = useOpsStore((s) => s.notifications);
   const markRead = useOpsStore((s) => s.markNotificationRead);
+  const currentUser = useAuthStore((s) => s.currentUser);
+
+  // Supervisors only see task-related alerts — contracts/iqamas, inventory,
+  // revenue, and payroll are the manager's responsibility, not theirs.
+  const isSupervisor = currentUser?.role === "supervisor";
+  const notifications = isSupervisor ? allNotifications.filter((n) => n.module === "tasks") : allNotifications;
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   useEffect(() => {

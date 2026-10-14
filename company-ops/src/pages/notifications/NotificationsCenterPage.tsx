@@ -7,6 +7,7 @@ import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import { useOpsStore } from "@/store/opsStore";
+import { useAuthStore } from "@/store/authStore";
 import { NOTIFICATION_PRIORITY_LABEL, NOTIFICATION_PRIORITY_TONE } from "@/lib/labels";
 import { formatArabicDateTime } from "@/utils/date";
 import type { NotificationPriority } from "@/types/domain";
@@ -19,10 +20,19 @@ const TABS: { key: NotificationPriority; label: string }[] = [
 ];
 
 export default function NotificationsCenterPage() {
-  const notifications = useOpsStore((s) => s.notifications);
+  const allNotifications = useOpsStore((s) => s.notifications);
   const markNotificationRead = useOpsStore((s) => s.markNotificationRead);
   const markAllNotificationsRead = useOpsStore((s) => s.markAllNotificationsRead);
+  const currentUser = useAuthStore((s) => s.currentUser);
   const [activeTab, setActiveTab] = useState<NotificationPriority>("urgent");
+
+  // Supervisors only see task-related alerts — contracts/iqamas, inventory,
+  // revenue, and payroll are the manager's responsibility, not theirs.
+  const isSupervisor = currentUser?.role === "supervisor";
+  const notifications = useMemo(
+    () => (isSupervisor ? allNotifications.filter((n) => n.module === "tasks") : allNotifications),
+    [allNotifications, isSupervisor]
+  );
 
   const filtered = useMemo(() => notifications.filter((n) => n.priority === activeTab), [notifications, activeTab]);
 

@@ -1,4 +1,4 @@
-export type Role = "manager" | "supervisor" | "employee" | "customer_service";
+export type Role = "manager" | "supervisor" | "customer_service" | "coordinator";
 
 export interface User {
   id: string;
@@ -62,6 +62,7 @@ export interface Task {
   title: string;
   description: string;
   assigneeId: string;
+  assignedBy: string; // userId of whoever created/assigned it (manager or coordinator)
   priority: TaskPriority;
   dueDate: string; // ISO date
   dueTime: string; // HH:mm
@@ -137,6 +138,11 @@ export interface Product {
   id: string;
   name: string;
   unit: string;
+  // The fixed quantity the manager sets when stocking/restocking the item —
+  // only changes when the manager edits it, never from logged usage.
+  quantity: number;
+  // The live remaining amount — starts equal to quantity and only decreases
+  // as supervisors log usage from their shift reports.
   currentStock: number;
   minimumStock: number;
   notes: string;
@@ -204,16 +210,31 @@ export interface PayrollAdjustment {
   notes: string;
 }
 
-// A field supervisor's end-of-shift submission: clients served, income, and
-// which payment methods were used (any combination), plus free-text issues/notes.
+export type AppearanceRating = "ممتاز" | "جيد" | "ضعيف";
+
+// Per-employee attendance + appearance, captured as part of the supervisor's
+// end-of-shift report and submitted to the manager together with it.
+export interface ShiftEmployeeEntry {
+  employeeId: string;
+  attendance: "present" | "absent";
+  appearanceRating: AppearanceRating | null;
+  appearanceReason: string;
+}
+
+// A field supervisor's end-of-shift submission: who was on shift and their
+// attendance/appearance, clients served, income, and which payment methods
+// were used (any combination) with how much was collected through each one,
+// plus free-text issues/notes.
 export interface ShiftReport {
   id: string;
   date: string; // ISO date
   teamId: string;
   supervisorId: string;
+  employees: ShiftEmployeeEntry[];
   clientsServed: number;
   totalIncome: number;
   paymentMethods: PaymentMethod[];
+  paymentAmounts: Record<PaymentMethod, number>;
   issues: string;
   notes: string;
   submittedAt: string; // ISO datetime
@@ -235,7 +256,7 @@ export interface PersonalTask {
   createdAt: string; // ISO datetime
 }
 
-export type ShiftName = "مساء" | "ليل";
+export type ShiftName = "صباح" | "مساء";
 
 // A customer-service shift report. Its `notes` field doubles as the
 // hand-over message the next shift's employee sees when they log in.
@@ -271,5 +292,18 @@ export interface Suggestion {
   details: string;
   notes: string;
   createdBy: string;
+  createdAt: string; // ISO datetime
+}
+
+// A free-text review the manager writes and sends to a coordinator
+// ("المسؤول المباشر") — the direction is the reverse of other reports in
+// this system (manager → coordinator, not employee → manager).
+export interface ManagerReport {
+  id: string;
+  recipientId: string;
+  date: string; // ISO date — the day this report is linked to on the calendar
+  development: string;
+  ratios: string;
+  notes: string;
   createdAt: string; // ISO datetime
 }

@@ -17,7 +17,7 @@ export default function CustomerServiceReportsPage() {
   const [bookedCount, setBookedCount] = useState(0);
   const [potentialCount, setPotentialCount] = useState(0);
   const [notes, setNotes] = useState("");
-  const [shift, setShift] = useState<ShiftName>("مساء");
+  const [shift, setShift] = useState<ShiftName>("صباح");
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
@@ -54,7 +54,7 @@ export default function CustomerServiceReportsPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           <Field label="الشفت">
             <div className="flex gap-2">
-              {(["مساء", "ليل"] as ShiftName[]).map((s) => (
+              {(["صباح", "مساء"] as ShiftName[]).map((s) => (
                 <button
                   key={s}
                   type="button"

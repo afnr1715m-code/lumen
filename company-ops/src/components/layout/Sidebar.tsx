@@ -4,6 +4,7 @@ import { navForRole } from "@/lib/rbac";
 import { ICON_MAP } from "./iconMap";
 import { useAuthStore } from "@/store/authStore";
 import { ROLE_LABEL } from "@/lib/labels";
+import washLogo from "@/assets/wash-logo.jpg";
 
 export default function Sidebar() {
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -28,10 +29,17 @@ export default function Sidebar() {
         <ul className="space-y-1">
           {items.map((item) => {
             const Icon = ICON_MAP[item.icon];
+            // NavLink's default matching treats a shorter href as active
+            // whenever the current path starts with it — e.g. "الرئيسية"
+            // (/customer-service) would stay highlighted on "مهامي"
+            // (/customer-service/my-tasks). Require an exact match for any
+            // item that has sibling pages nested under its own href.
+            const hasNestedSibling = items.some((other) => other.key !== item.key && other.href.startsWith(`${item.href}/`));
             return (
               <li key={item.key}>
                 <NavLink
                   to={item.href}
+                  end={hasNestedSibling}
                   className={({ isActive }) =>
                     `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition ${
                       isActive ? "bg-accent-soft text-accent" : "text-muted hover:bg-bg hover:text-ink"
@@ -65,6 +73,10 @@ export default function Sidebar() {
             <LogOut size={16} />
           </button>
         </div>
+      </div>
+
+      <div className="flex items-center justify-center border-t border-line py-3">
+        <img src={washLogo} alt="WASH" className="h-7 w-7 rounded-md object-cover opacity-90" />
       </div>
     </aside>
   );

@@ -16,38 +16,40 @@ export const NAV_ITEMS: NavItem[] = [
   // Manager
   { key: "dashboard", label: "لوحة المدير", href: "/dashboard", icon: "LayoutDashboard", roles: ["manager"] },
   { key: "tasks", label: "المهام", href: "/tasks", icon: "CheckSquare", roles: ["manager"] },
-  { key: "calendar", label: "التقويم", href: "/calendar", icon: "Calendar", roles: ["manager", "employee"] },
+  { key: "my-tasks", label: "مهامي", href: "/my-tasks", icon: "ListChecks", roles: ["manager"] },
+  { key: "calendar", label: "التقويم", href: "/calendar", icon: "Calendar", roles: ["manager"] },
   { key: "employees", label: "الموظفون", href: "/employees", icon: "Users", roles: ["manager"] },
   { key: "teams", label: "الفرق", href: "/teams", icon: "Users2", roles: ["manager"] },
   { key: "revenue", label: "دخل الفرق", href: "/revenue", icon: "BarChart3", roles: ["manager"] },
   { key: "inventory", label: "المخزون", href: "/inventory", icon: "Boxes", roles: ["manager"] },
   { key: "reports", label: "التقارير", href: "/reports", icon: "FileBarChart", roles: ["manager"] },
   { key: "payroll", label: "الرواتب", href: "/payroll", icon: "Wallet", roles: ["manager"] },
-  { key: "notifications", label: "مركز التنبيهات", href: "/notifications", icon: "Bell", roles: ["manager", "employee"] },
+  { key: "notifications", label: "مركز التنبيهات", href: "/notifications", icon: "Bell", roles: ["manager"] },
   { key: "audit", label: "سجل العمليات", href: "/audit-log", icon: "History", roles: ["manager"] },
 
   // Supervisor — order here is exactly the supervisor's sidebar order
   { key: "operations", label: "الرئيسية", href: "/operations", icon: "LayoutDashboard", roles: ["supervisor"] },
-  { key: "sup-tasks", label: "مهامي", href: "/tasks", icon: "CheckSquare", roles: ["supervisor"] },
-  { key: "shift-employees", label: "الموظفين", href: "/operations/employees", icon: "Users2", roles: ["supervisor"] },
+  { key: "shift-reports", label: "التقرير اليومي", href: "/operations/reports", icon: "FileBarChart", roles: ["supervisor"] },
   { key: "sup-inventory", label: "المخزون", href: "/inventory", icon: "Boxes", roles: ["supervisor"] },
-  { key: "shift-reports", label: "التقارير", href: "/operations/reports", icon: "FileBarChart", roles: ["supervisor"] },
+  { key: "sup-tasks", label: "مهامي", href: "/operations/my-tasks", icon: "CheckSquare", roles: ["supervisor"] },
   { key: "sup-calendar", label: "التقويم", href: "/calendar", icon: "Calendar", roles: ["supervisor"] },
-  { key: "shift-issues", label: "المشاكل والأعطال", href: "/operations/issues", icon: "AlertTriangle", roles: ["supervisor"] },
   { key: "sup-notifications", label: "مركز التنبيهات", href: "/notifications", icon: "Bell", roles: ["supervisor"] },
-  { key: "shift-notes", label: "الملاحظات", href: "/operations/notes", icon: "StickyNote", roles: ["supervisor"] },
-
-  // Employee
-  { key: "my-work", label: "مهامي", href: "/my-work", icon: "ListChecks", roles: ["employee"] },
 
   // Customer service — order here is exactly the customer-service sidebar order
   { key: "cs-home", label: "الرئيسية", href: "/customer-service", icon: "LayoutDashboard", roles: ["customer_service"] },
-  { key: "cs-tasks", label: "المهام", href: "/customer-service/tasks", icon: "CheckSquare", roles: ["customer_service"] },
   { key: "cs-my-tasks", label: "مهامي", href: "/customer-service/my-tasks", icon: "ListChecks", roles: ["customer_service"] },
   { key: "cs-calendar", label: "التقويم", href: "/calendar", icon: "Calendar", roles: ["customer_service"] },
   { key: "cs-reports", label: "التقارير", href: "/customer-service/reports", icon: "FileBarChart", roles: ["customer_service"] },
   { key: "cs-complaints", label: "الشكاوى", href: "/customer-service/complaints", icon: "AlertTriangle", roles: ["customer_service"] },
   { key: "cs-suggestions", label: "الاقتراحات", href: "/customer-service/suggestions", icon: "StickyNote", roles: ["customer_service"] },
+
+  // Coordinator ("المسؤول المباشر") — order here is exactly the coordinator's sidebar order
+  { key: "coord-home", label: "الرئيسية", href: "/coordinator", icon: "LayoutDashboard", roles: ["coordinator"] },
+  { key: "coord-tasks", label: "المهام", href: "/tasks", icon: "CheckSquare", roles: ["coordinator"] },
+  { key: "coord-inventory", label: "المخزون", href: "/inventory", icon: "Boxes", roles: ["coordinator"] },
+  { key: "coord-payroll", label: "الرواتب", href: "/payroll", icon: "Wallet", roles: ["coordinator"] },
+  { key: "coord-reports", label: "التقارير", href: "/coordinator/reports", icon: "FileBarChart", roles: ["coordinator"] },
+  { key: "coord-calendar", label: "التقويم", href: "/calendar", icon: "Calendar", roles: ["coordinator"] },
 ];
 
 export function navForRole(role: Role): NavItem[] {
@@ -57,8 +59,8 @@ export function navForRole(role: Role): NavItem[] {
 export function defaultRouteForRole(role: Role): string {
   if (role === "manager") return "/dashboard";
   if (role === "supervisor") return "/operations";
-  if (role === "customer_service") return "/customer-service";
-  return "/my-work";
+  if (role === "coordinator") return "/coordinator";
+  return "/customer-service";
 }
 
 export function canAccessRoute(role: Role, href: string): boolean {

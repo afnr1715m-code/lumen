@@ -3,13 +3,15 @@
 :root {
   --color-ink: #0f172a;
   --color-muted: #64748b;
-  --color-bg: #f6f7f5;
+  --color-bg: #ffffff;
   --color-surface: #ffffff;
-  --color-line: #e2e5e0;
+  --color-line: #e2e8f0;
 
-  --color-accent: #0a6e3d;
-  --color-accent-strong: #075c32;
-  --color-accent-soft: #e4f3e9;
+  /* WASH brand — sampled from the client's logo (navy wordmark, cyan accent) */
+  --color-accent: #00b5f1;
+  --color-accent-strong: #0092c2;
+  --color-accent-soft: #e2f4fe;
+  --color-navy: #05294d;
 
   --color-danger: #dc2626;
   --color-danger-soft: #fee2e2;
@@ -17,8 +19,8 @@
   --color-warning-soft: #fef3c7;
   --color-info: #2563eb;
   --color-info-soft: #dbeafe;
-  --color-success: #0a6e3d;
-  --color-success-soft: #e4f3e9;
+  --color-success: #16a34a;
+  --color-success-soft: #dcfce7;
 }
 
 @theme inline {
@@ -30,6 +32,7 @@
   --color-accent: var(--color-accent);
   --color-accent-strong: var(--color-accent-strong);
   --color-accent-soft: var(--color-accent-soft);
+  --color-navy: var(--color-navy);
   --color-danger: var(--color-danger);
   --color-danger-soft: var(--color-danger-soft);
   --color-warning: var(--color-warning);
@@ -94,4 +97,17 @@ html[dir="rtl"] .slide-in-panel {
 
 .fade-in {
   animation: fade-in 150ms ease-out;
+}
+
+/* Hide the native number-input spin buttons everywhere so these fields read
+   as normal typeable text boxes instead of click-only counters. */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

@@ -1,4 +1,5 @@
 import type {
+  AppearanceRating,
   AttendanceStatus,
   CalendarEventType,
   ComplaintStatus,
@@ -23,8 +24,8 @@ export type Tone = "success" | "warning" | "danger" | "info" | "neutral";
 export const ROLE_LABEL: Record<Role, string> = {
   manager: "مدير",
   supervisor: "مشرف",
-  employee: "موظف",
   customer_service: "موظف خدمة عملاء",
+  coordinator: "مسؤول مباشر",
 };
 
 export const TASK_PRIORITY_LABEL: Record<TaskPriority, string> = {
@@ -182,7 +183,6 @@ export const SUPERVISOR_REPORT_STATUS_TONE: Record<SupervisorReportStatus, Tone>
   "مرفوض": "danger",
 };
 
-export type AppearanceRating = "ممتاز" | "جيد" | "ضعيف";
 export const APPEARANCE_RATING_TONE: Record<AppearanceRating, Tone> = {
   "ممتاز": "success",
   "جيد": "info",

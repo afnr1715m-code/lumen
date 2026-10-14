@@ -28,7 +28,9 @@ export default function KPICard({
           <Icon size={18} />
         </span>
       </div>
-      <div className="mt-3 text-2xl font-extrabold text-ink">{value}</div>
+      <div className="mt-3 text-2xl font-extrabold text-ink">
+        <bdi>{value}</bdi>
+      </div>
     </div>
   );
 }

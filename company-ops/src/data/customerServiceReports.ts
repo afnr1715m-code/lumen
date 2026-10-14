@@ -2,7 +2,7 @@ import type { CustomerServiceReport } from "@/types/domain";
 import { daysFromToday, isoDateTime } from "@/utils/date";
 
 // نورة الدوسري (emp_17) works the مساء (evening) shift — her handover notes
-// are what طارق (emp_16, ليل / night shift, the demo login) sees when he
+// are what طارق (emp_16, صباح / morning shift, the demo login) sees when he
 // opens the Reports page.
 export const customerServiceReports: CustomerServiceReport[] = [
   {

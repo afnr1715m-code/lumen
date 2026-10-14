@@ -5,12 +5,10 @@ import { defaultRouteForRole } from "@/lib/rbac";
 
 import Login from "@/pages/Login";
 import ManagerDashboard from "@/pages/dashboard/ManagerDashboard";
-import MyWorkPage from "@/pages/mywork/MyWorkPage";
 import OperationsHomePage from "@/pages/operations/OperationsHomePage";
-import ShiftEmployeesPage from "@/pages/operations/ShiftEmployeesPage";
 import ShiftReportsPage from "@/pages/operations/ShiftReportsPage";
-import ShiftIssuesPage from "@/pages/operations/ShiftIssuesPage";
-import ShiftNotesPage from "@/pages/operations/ShiftNotesPage";
+import MyTasksPage from "@/pages/operations/MyTasksPage";
+import ManagerMyTasksPage from "@/pages/dashboard/ManagerMyTasksPage";
 import TasksPage from "@/pages/tasks/TasksPage";
 import CalendarPage from "@/pages/calendar/CalendarPage";
 import EmployeesPage from "@/pages/employees/EmployeesPage";
@@ -24,11 +22,12 @@ import ReportsPage from "@/pages/reports/ReportsPage";
 import PayrollPage from "@/pages/payroll/PayrollPage";
 import AuditLogPage from "@/pages/audit/AuditLogPage";
 import CustomerServiceHomePage from "@/pages/customerservice/CustomerServiceHomePage";
-import CustomerServiceTasksPage from "@/pages/customerservice/CustomerServiceTasksPage";
 import CustomerServiceMyTasksPage from "@/pages/customerservice/CustomerServiceMyTasksPage";
 import CustomerServiceReportsPage from "@/pages/customerservice/CustomerServiceReportsPage";
 import CustomerServiceComplaintsPage from "@/pages/customerservice/CustomerServiceComplaintsPage";
 import CustomerServiceSuggestionsPage from "@/pages/customerservice/CustomerServiceSuggestionsPage";
+import CoordinatorDashboardPage from "@/pages/coordinator/CoordinatorDashboardPage";
+import CoordinatorReportsPage from "@/pages/coordinator/CoordinatorReportsPage";
 
 function RootRedirect() {
   const currentUser = useAuthStore((s) => s.currentUser);
@@ -43,13 +42,11 @@ export default function App() {
         <Route path="/" element={<RootRedirect />} />
 
         <Route path="/dashboard" element={<ProtectedRoute><ManagerDashboard /></ProtectedRoute>} />
-        <Route path="/my-work" element={<ProtectedRoute><MyWorkPage /></ProtectedRoute>} />
         <Route path="/operations" element={<ProtectedRoute><OperationsHomePage /></ProtectedRoute>} />
-        <Route path="/operations/employees" element={<ProtectedRoute><ShiftEmployeesPage /></ProtectedRoute>} />
         <Route path="/operations/reports" element={<ProtectedRoute><ShiftReportsPage /></ProtectedRoute>} />
-        <Route path="/operations/issues" element={<ProtectedRoute><ShiftIssuesPage /></ProtectedRoute>} />
-        <Route path="/operations/notes" element={<ProtectedRoute><ShiftNotesPage /></ProtectedRoute>} />
+        <Route path="/operations/my-tasks" element={<ProtectedRoute><MyTasksPage /></ProtectedRoute>} />
         <Route path="/tasks" element={<ProtectedRoute><TasksPage /></ProtectedRoute>} />
+        <Route path="/my-tasks" element={<ProtectedRoute><ManagerMyTasksPage /></ProtectedRoute>} />
         <Route path="/calendar" element={<ProtectedRoute><CalendarPage /></ProtectedRoute>} />
         <Route path="/employees" element={<ProtectedRoute><EmployeesPage /></ProtectedRoute>} />
         <Route path="/employees/:id" element={<ProtectedRoute><EmployeeDetailPage /></ProtectedRoute>} />
@@ -63,11 +60,13 @@ export default function App() {
         <Route path="/audit-log" element={<ProtectedRoute><AuditLogPage /></ProtectedRoute>} />
 
         <Route path="/customer-service" element={<ProtectedRoute><CustomerServiceHomePage /></ProtectedRoute>} />
-        <Route path="/customer-service/tasks" element={<ProtectedRoute><CustomerServiceTasksPage /></ProtectedRoute>} />
         <Route path="/customer-service/my-tasks" element={<ProtectedRoute><CustomerServiceMyTasksPage /></ProtectedRoute>} />
         <Route path="/customer-service/reports" element={<ProtectedRoute><CustomerServiceReportsPage /></ProtectedRoute>} />
         <Route path="/customer-service/complaints" element={<ProtectedRoute><CustomerServiceComplaintsPage /></ProtectedRoute>} />
         <Route path="/customer-service/suggestions" element={<ProtectedRoute><CustomerServiceSuggestionsPage /></ProtectedRoute>} />
+
+        <Route path="/coordinator" element={<ProtectedRoute><CoordinatorDashboardPage /></ProtectedRoute>} />
+        <Route path="/coordinator/reports" element={<ProtectedRoute><CoordinatorReportsPage /></ProtectedRoute>} />
 
         <Route path="*" element={<RootRedirect />} />
       </Routes>

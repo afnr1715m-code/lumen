@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import type { AppearanceRating } from "@/lib/labels";
-import type { PaymentMethod } from "@/types/domain";
+import type { AppearanceRating, PaymentMethod } from "@/types/domain";
 
 interface AppearanceEntry {
   rating: AppearanceRating;
@@ -22,6 +21,7 @@ interface ShiftDraftState {
   clientsServed: number;
   totalIncome: number;
   paymentMethods: Set<PaymentMethod>;
+  paymentAmounts: Partial<Record<PaymentMethod, number>>;
   issues: string;
   notes: string;
 
@@ -32,6 +32,7 @@ interface ShiftDraftState {
   setClientsServed: (value: number) => void;
   setTotalIncome: (value: number) => void;
   togglePaymentMethod: (method: PaymentMethod) => void;
+  setPaymentAmount: (method: PaymentMethod, value: number) => void;
   setIssues: (value: string) => void;
   setNotes: (value: string) => void;
   reset: () => void;
@@ -44,6 +45,7 @@ export const useShiftDraftStore = create<ShiftDraftState>()((set) => ({
   clientsServed: 0,
   totalIncome: 0,
   paymentMethods: new Set(),
+  paymentAmounts: {},
   issues: "",
   notes: "",
 
@@ -73,10 +75,17 @@ export const useShiftDraftStore = create<ShiftDraftState>()((set) => ({
   togglePaymentMethod: (method) =>
     set((state) => {
       const next = new Set(state.paymentMethods);
-      if (next.has(method)) next.delete(method);
-      else next.add(method);
-      return { paymentMethods: next };
+      const nextAmounts = { ...state.paymentAmounts };
+      if (next.has(method)) {
+        next.delete(method);
+        delete nextAmounts[method];
+      } else {
+        next.add(method);
+      }
+      return { paymentMethods: next, paymentAmounts: nextAmounts };
     }),
+
+  setPaymentAmount: (method, value) => set((state) => ({ paymentAmounts: { ...state.paymentAmounts, [method]: value } })),
 
   setIssues: (value) => set({ issues: value }),
   setNotes: (value) => set({ notes: value }),
@@ -89,6 +98,7 @@ export const useShiftDraftStore = create<ShiftDraftState>()((set) => ({
       clientsServed: 0,
       totalIncome: 0,
       paymentMethods: new Set(),
+      paymentAmounts: {},
       issues: "",
       notes: "",
     }),
